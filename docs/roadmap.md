@@ -4,4 +4,5 @@
 | 2 | September | | EC2 |
 | 3 | October | | Lambda |
 | 4 | November | | API Gateway & DynamoDB |
-| 5 | February | | Braket |
+| 5 | February | | Bedrock |
+| 6 | March | | Braket |
