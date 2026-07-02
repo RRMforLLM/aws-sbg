@@ -1,0 +1,19 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "PermisosS3Especificos",
+            "Effect": "Allow",
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject"
+            ],
+            "Resource": "arn:aws:s3:::sbg-lab-2026-tunombre/*",
+            "Condition": {
+                "IpAddress": {
+                    "aws:SourceIp": "TU_IP_PUBLICA/32"
+                }
+            }
+        }
+    ]
+}
