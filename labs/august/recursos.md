@@ -1,2 +1,2 @@
 - [Introduction to AWS Identity and Access Management (IAM) (Español LATAM)](https://skillbuilder.aws/learn/XFPX3M7HAQ/introduction-to-aws-identity-and-access-management-iam-espaol-latam/GH1QMNRZBQ)
-- [Introduction to Amazon Simple Storage Service (S3) (Español LATAM)](https://skillbuilder.aws/learn/R54NZHEX5K/introduction-to-amazon-simple-storage-service-s3-espaol-latam/NKN6UQ8A5Q) to search the web.
+- [Introduction to Amazon Simple Storage Service (S3) (Español LATAM)](https://skillbuilder.aws/learn/R54NZHEX5K/introduction-to-amazon-simple-storage-service-s3-espaol-latam/NKN6UQ8A5Q)
