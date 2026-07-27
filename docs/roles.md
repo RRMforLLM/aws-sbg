@@ -1,4 +1,5 @@
 **Felipe:** Logística (espacios UACH)  
 **Uriel:** Contenido/Infra (validación técnica)  
 **Mariel:** Difusión (plan de convocatoria)  
-**Ricardo:** Coordinación (y apoyo en cualquiera de las tres áreas)  
+**Elías:** Datos y Analítica
+**Ricardo:** Coordinación (y apoyo en cualquiera de las cuatro áreas)  
