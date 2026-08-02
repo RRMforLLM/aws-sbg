@@ -134,7 +134,7 @@ aws s3 cp archivo_test.txt s3://$BUCKET_NAME/ --profile sbg-user
 ### 6 - Auditoría con CloudTrail
 
 - Ingresar a la consola de AWS → CloudTrail → Event history
-- Filtrar por el nombre del bucket o el usuario `sbg-student-test` y observar los eventos `AccessDenied` previos y el evento `PutObject` exitoso
+- Filtrar por *resource name* ingresando el valor de la variable `$BUCKET_NAME` y confirmar el registro de los eventos `CreateBucket` y `PutBucketPolicy`.
 
 ### 7 - Limpieza de recursos
 
