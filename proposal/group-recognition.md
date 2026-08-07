@@ -9,7 +9,7 @@ El **AWS Student Builder Group (SBG)** es una iniciativa estudiantil técnica ce
 
 #### 2. Objetivos del Programa
 
-* **Capacitación Práctica:** Ejecución de 6 sesiones técnicas mensuales (agosto 2026 – enero 2027) con laboratorios prácticos en AWS.
+* **Capacitación Práctica:** Ejecución de 6 sesiones técnicas mensuales (agosto 2026 – junio 2027) con laboratorios prácticos en AWS.
 * **Certificación y Empleabilidad:** Preparar a los estudiantes con habilidades técnicas bajo estándares de la industria, aumentando su perfil competitivo global.
 * **Comunidad Técnica:** Fomentar una cultura de colaboración e intercambio de conocimientos entre alumnos de distintas ingenierías.
 
