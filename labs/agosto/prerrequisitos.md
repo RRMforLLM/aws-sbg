@@ -37,8 +37,14 @@ rm -rf aws awscliv2.zip
 Ejecuta en una ventana de PowerShell:
 
 ```powershell
-msiexec.exe /i [https://awscli.amazonaws.com/AWSCLIV2.msi](https://awscli.amazonaws.com/AWSCLIV2.msi) /qn
+# 1. Download installer
+Invoke-WebRequest -Uri "https://awscli.amazonaws.com/AWSCLIV2.msi" -OutFile "AWSCLIV2.msi"
 
+# 2. Run silent installer
+Start-Process msiexec.exe -ArgumentList '/i AWSCLIV2.msi /qn' -Wait
+
+# 3. Clean up installer file
+Remove-Item "AWSCLIV2.msi"
 ```
 
 ---
