@@ -198,7 +198,7 @@ EOF
     }
   ]
 }
-"@ | Out-File -FilePath policy.json -Encoding utf8
+"@ | Out-File -FilePath policy.json -Encoding ascii
 
 ```
 
