@@ -261,29 +261,11 @@ Debe retornar un JSON con tu `Account`, `UserId` y el `Arn` de tu usuario/rol ad
 
 ---
 
-## 5. Preparación de Archivos y Variables del Laboratorio
+## 5. Crear archivo de texto para pruebas
 
-### A. Crear archivo de texto para pruebas
 
 ```bash
 echo "Prueba de subida S3 - Laboratorio IAM" > archivo_test.txt
-
-```
-
-### B. Configurar variables de entorno únicas
-
-Define tu identificador para evitar colisiones en nombres globales de S3:
-
-```bash
-export STUDENT_ID="tu-usuario-o-matricula"
-export BUCKET_NAME="sbg-uach-test-lab-2026-${STUDENT_ID}"
-
-```
-
-Verifica que la variable cargó correctamente:
-
-```bash
-echo $BUCKET_NAME
 
 ```
 
@@ -296,4 +278,3 @@ Marca cada casilla antes de iniciar el **Paso 0** del laboratorio:
 * [ ] `aws --version` ejecuta sin errores (CLI v2).
 * [ ] `aws sts get-caller-identity` autentica correctamente contra tu cuenta de AWS.
 * [ ] `archivo_test.txt` está creado en el directorio actual (`ls archivo_test.txt`).
-* [ ] `$BUCKET_NAME` imprime `sbg-uach-test-lab-2026-<tu_id>`.
