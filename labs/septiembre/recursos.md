@@ -1,0 +1,1 @@
+- [Introduction to Amazon EC2 (Español LATAM)](https://skillbuilder.aws/learn/9VNGAHHAUU/introduction-to-amazon-ec2-espaol-latam/)
