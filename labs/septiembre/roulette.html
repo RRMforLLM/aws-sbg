@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sorteo AWS SBG</title>
+        <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+        <style>
+            body { font-family: 'Arial', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f0f2f5; margin: 0; overflow: hidden; }
+            .container { display: flex; gap: 50px; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.1); align-items: center; z-index: 10; }
+            .wheel-container { position: relative; width: 500px; height: 500px; }
+            #wheel { border-radius: 50%; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+            .pointer { position: absolute; right: -25px; top: 50%; transform: translateY(-50%); width: 0; height: 0; border-top: 25px solid transparent; border-bottom: 25px solid transparent; border-right: 40px solid #333; z-index: 10; }
+            
+            #speedometer { position: absolute; top: -10px; left: -10px; background: rgba(35, 47, 62, 0.9); color: white; padding: 8px 16px; border-radius: 8px; font-weight: bold; font-size: 16px; z-index: 20; border: 2px solid #FF9900; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-variant-numeric: tabular-nums; }
+
+            .controls { display: flex; flex-direction: column; width: 300px; }
+            textarea { height: 350px; resize: none; margin-bottom: 20px; padding: 15px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; font-family: inherit; }
+            button { background-color: #007bff; color: white; border: none; padding: 15px; font-size: 18px; font-weight: bold; border-radius: 8px; cursor: pointer; transition: background 0.2s; user-select: none; -webkit-user-select: none; }
+            button:hover { background-color: #0056b3; }
+            button:active { transform: scale(0.98); }
+
+            #winnerOverlay {
+                position: fixed; inset: 0; background: rgba(240, 242, 245, 0.85); backdrop-filter: blur(5px);
+                display: flex; justify-content: center; align-items: center; z-index: 100;
+                opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+            }
+            #winnerOverlay.show { opacity: 1; pointer-events: all; }
+            .floating-text {
+                text-align: center;
+                transform: scale(0.5); opacity: 0;
+                transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.6s ease;
+            }
+            #winnerOverlay.show .floating-text { transform: scale(1); opacity: 1; }
+            .floating-text h2 { margin: 0 0 10px 0; color: #232F3E; font-size: 40px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; }
+            #winnerText { font-size: 80px; font-weight: 900; color: #FF9900; margin-bottom: 40px; text-shadow: 2px 4px 10px rgba(0,0,0,0.15); }
+            #closeOverlayBtn {
+                background: #232F3E; color: white; border: none; padding: 15px 50px;
+                font-size: 20px; font-weight: bold; border-radius: 8px; cursor: pointer; transition: background 0.2s, transform 0.1s;
+            }
+            #closeOverlayBtn:hover { background: #374151; transform: scale(1.05); }
+        </style>
+    </head>
+    <body>
+
+        <div class="container">
+            <div class="wheel-container">
+                <div id="speedometer">RPM: 0</div>
+                <div class="pointer"></div>
+                <canvas id="wheel" width="500" height="500"></canvas>
+            </div>
+            <div class="controls">
+                <label for="namesList" style="margin-bottom: 10px; font-weight: bold; font-size: 18px;">Participantes:</label>
+                <textarea id="namesList">Estudiante 1
+Estudiante 2
+Estudiante 3
+Estudiante 4
+Estudiante 5</textarea>
+                <button id="spinBtn">Girar</button>
+            </div>
+        </div>
+
+        <div id="winnerOverlay">
+            <div class="floating-text">
+                <h2>¡Tenemos un ganador!</h2>
+                <div id="winnerText"></div>
+                <button id="closeOverlayBtn">Continuar</button>
+            </div>
+        </div>
+
+        <script>
+            const canvas = document.getElementById("wheel");
+            const ctx = canvas.getContext("2d");
+            const textarea = document.getElementById("namesList");
+            const spinBtn = document.getElementById("spinBtn");
+            const speedometer = document.getElementById("speedometer");
+            
+            const overlay = document.getElementById("winnerOverlay");
+            const winnerText = document.getElementById("winnerText");
+            const closeBtn = document.getElementById("closeOverlayBtn");
+
+            const roulette_colors = ["#FF9900", "#04E382", "#41B4FF", "#FD58E9", "#AC5CFE"];
+            const confetti_colors = ["#A864FD", "#29CDFF", "#78FF44", "#FF718D", "#FDFF6A"];
+            
+            let names = [];
+            let currentAngle = 0;
+            let spinTimeout = null;
+            let spinAngleStart = 0;
+            let spinTime = 0;
+            let spinTimeTotal = 0;
+
+            let isHolding = false;
+            let holdAnimation = null;
+            let holdSpeed = 0;
+
+            function getNames() {
+                return textarea.value.split('\n').filter(n => n.trim() !== "");
+            }
+
+            function drawWheel() {
+                names = getNames();
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                if (names.length === 0) return;
+
+                const arc = Math.PI * 2 / names.length;
+                const cx = canvas.width / 2;
+                const cy = canvas.height / 2;
+                const radius = cx;
+
+                for (let i = 0; i < names.length; i++) {
+                    const angle = currentAngle + i * arc;
+                    
+                    ctx.beginPath();
+                    ctx.fillStyle = roulette_colors[i % roulette_colors.length];
+                    ctx.moveTo(cx, cy);
+                    ctx.arc(cx, cy, radius, angle, angle + arc, false);
+                    ctx.fill();
+
+                    ctx.save();
+                    ctx.fillStyle = "#ffffff";
+                    ctx.translate(cx + Math.cos(angle + arc / 2) * (radius * 0.65), cy + Math.sin(angle + arc / 2) * (radius * 0.65));
+                    ctx.rotate(angle + arc / 2);
+                    ctx.font = "bold 24px 'Arial'";
+                    ctx.shadowColor = "rgba(0,0,0,0.5)";
+                    ctx.shadowBlur = 4;
+                    ctx.fillText(names[i], -ctx.measureText(names[i]).width / 2, 8);
+                    ctx.restore();
+                }
+                
+                ctx.beginPath();
+                ctx.fillStyle = "#ffffff";
+                ctx.arc(cx, cy, radius * 0.2, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            function holdSpin() {
+                if (!isHolding) return;
+                holdSpeed += 0.5; 
+                currentAngle += (holdSpeed * Math.PI / 180);
+                speedometer.innerText = `RPM: ${Math.round(holdSpeed * 15)}`;
+                drawWheel();
+                holdAnimation = requestAnimationFrame(holdSpin);
+            }
+
+            function rotateWheel() {
+                spinTime += 30;
+                if (spinTime >= spinTimeTotal) {
+                    stopRotateWheel();
+                    return;
+                }
+                const spinAngle = spinAngleStart - easeOut(spinTime, 0, spinAngleStart, spinTimeTotal);
+                currentAngle += (spinAngle * Math.PI / 180);
+                speedometer.innerText = `RPM: ${Math.round(spinAngle * 15)}`;
+                drawWheel();
+                spinTimeout = requestAnimationFrame(rotateWheel);
+            }
+
+            function stopRotateWheel() {
+                cancelAnimationFrame(spinTimeout);
+                speedometer.innerText = `RPM: 0`;
+                const degrees = (currentAngle * 180 / Math.PI) % 360;
+                const arcd = 360 / names.length;
+                const index = Math.floor((360 - degrees) / arcd) % names.length;
+                
+                winnerText.innerText = names[index];
+                overlay.classList.add("show");
+                
+                const duration = 4000;
+                const end = Date.now() + duration;
+
+                (function frame() {
+                    confetti({
+                        particleCount: 7,
+                        angle: 270,
+                        spread: 180,
+                        origin: { x: Math.random(), y: -0.1 },
+                        scalar: 2,
+                        ticks: 300,
+                        gravity: 0.8,
+                        colors: confetti_colors,
+                        shapes: ['square'],
+                        zIndex: 1000
+                    });
+                    if (Date.now() < end) {
+                        requestAnimationFrame(frame);
+                    }
+                }());
+            }
+
+            function easeOut(t, b, c, d) {
+                const ts = (t /= d) * t;
+                const tc = ts * t;
+                return b + c * (tc + -3 * ts + 3 * t);
+            }
+
+            function startSpin(e) {
+                if (e.cancelable) e.preventDefault();
+                if (getNames().length === 0) return;
+                overlay.classList.remove("show");
+                cancelAnimationFrame(spinTimeout);
+                cancelAnimationFrame(holdAnimation);
+                isHolding = true;
+                holdSpeed = 0;
+                holdSpin();
+            }
+
+            function endSpin() {
+                if (!isHolding) return;
+                isHolding = false;
+                cancelAnimationFrame(holdAnimation);
+                spinAngleStart = holdSpeed > 5 ? holdSpeed : (Math.random() * 10 + 15);
+                spinTime = 0;
+                spinTimeTotal = Math.random() * 3000 + 4000;
+                rotateWheel();
+            }
+
+            spinBtn.addEventListener("mousedown", startSpin);
+            spinBtn.addEventListener("touchstart", startSpin, { passive: false });
+            spinBtn.addEventListener("mouseup", endSpin);
+            spinBtn.addEventListener("mouseleave", endSpin);
+            spinBtn.addEventListener("touchend", endSpin);
+
+            closeBtn.addEventListener("click", () => {
+                overlay.classList.remove("show");
+            });
+
+            textarea.addEventListener("input", drawWheel);
+            drawWheel();
+        </script>
+    </body>
+</html>
