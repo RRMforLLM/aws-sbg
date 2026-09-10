@@ -88,7 +88,7 @@ sudo wget RAW_URL_DE_GITHUB
 * En la consola de EC2, selecciona `sbg-uach-web-server`.
 * Da clic en **Instance state** > **Terminate instance**.
 * Confirma la terminación.
-* *(Opcional)* Navega a **Security Groups** en el panel izquierdo y elimina `sbg-web-sg` una vez que la instancia haya sido terminada por completo.
+* Navega a **Security Groups** en el panel izquierdo y elimina `sbg-web-sg` una vez que la instancia haya sido terminada por completo.
 
 ## Recomendaciones de seguridad
 
