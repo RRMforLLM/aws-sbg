@@ -62,8 +62,6 @@ sudo systemctl enable httpd
 sudo systemctl status httpd
 ```
 
-*(Presiona `q` para salir del status).*
-
 ### 5 - Despliegue de la aplicación (Ruleta)
 
 **Navega al directorio público del servidor y descarga el código fuente:**
