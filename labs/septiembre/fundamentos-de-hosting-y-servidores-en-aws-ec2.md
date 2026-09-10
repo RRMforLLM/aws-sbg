@@ -68,10 +68,10 @@ sudo systemctl status httpd
 
 ```bash
 cd /var/www/html
-sudo wget <TU_URL_DE_GITHUB_RAW_INDEX_HTML>
+sudo wget <RAW_URL_DE_GITHUB>
 ```
 
-*(Reemplaza `<TU_URL_DE_GITHUB_RAW_INDEX_HTML>` por la URL real de tu archivo).*
+*(Reemplaza `<URL_RAW_DE_GITHUB>` por la [URL cruda](#requisitos-previos) del archivo HTML).*
 
 ### 6 - Ejecución de la aplicación
 
