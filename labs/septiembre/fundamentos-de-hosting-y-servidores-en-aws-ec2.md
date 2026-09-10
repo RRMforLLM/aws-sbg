@@ -78,6 +78,7 @@ sudo wget RAW_URL_DE_GITHUB
 * Regresa a la consola de EC2.
 * Selecciona tu instancia y copia el valor de **Public IPv4 address**.
 * Pega la IP en una nueva pestaña de tu navegador (asegurate de usar `http://` y no `https://`).
+* Accede al archivo HTML añadiendo `/roulette.html` a la dirección en la que ya estás (quedaría como `http://XXX.XX.XXX.XX/roulette.html`)
 * La aplicación debe cargar inmediatamente. Ejecuta un sorteo de prueba.
 
 ### 7 - Limpieza de recursos
