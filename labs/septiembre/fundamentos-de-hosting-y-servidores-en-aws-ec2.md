@@ -76,6 +76,7 @@ sudo wget https://raw.githubusercontent.com/RRMforLLM/aws-sbg/refs/heads/beta/la
 
 * **Opción A - Desde la consola**: Regresa a la consola de EC2, selecciona tu instancia y copia el valor de **Public IPv4 address**.
 * **Opción B - Desde la terminal**: En la terminal de EC2 Instance Connect ejecuta el siguiente comando y copia la IP que te regresa:
+  
 ```bash
     curl http://checkip.amazonaws.com
 ```
