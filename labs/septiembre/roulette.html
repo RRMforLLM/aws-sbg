@@ -93,6 +93,64 @@ Estudiante 5</textarea>
             let holdAnimation = null;
             let holdSpeed = 0;
 
+            let audioCtx = null;
+
+            function initAudio() {
+                if (!audioCtx) {
+                    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                    if (!AudioCtx) return;
+                    audioCtx = new AudioCtx();
+                }
+                if (audioCtx.state === "suspended") audioCtx.resume();
+            }
+
+            function playTone(freq, start, dur, type, vol) {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.value = freq;
+                gain.gain.setValueAtTime(0, start);
+                gain.gain.linearRampToValueAtTime(vol, start + 0.02);
+                gain.gain.exponentialRampToValueAtTime(0.001, start + dur);
+                osc.connect(gain).connect(audioCtx.destination);
+                osc.start(start);
+                osc.stop(start + dur + 0.05);
+            }
+
+            function playCheer(start, dur) {
+                const buffer = audioCtx.createBuffer(1, audioCtx.sampleRate * dur, audioCtx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+
+                const noise = audioCtx.createBufferSource();
+                noise.buffer = buffer;
+
+                const filter = audioCtx.createBiquadFilter();
+                filter.type = "bandpass";
+                filter.frequency.value = 1500;
+                filter.Q.value = 0.8;
+
+                const gain = audioCtx.createGain();
+                gain.gain.setValueAtTime(0, start);
+                gain.gain.linearRampToValueAtTime(0.25, start + 0.3);
+                gain.gain.linearRampToValueAtTime(0.18, start + dur * 0.6);
+                gain.gain.linearRampToValueAtTime(0, start + dur);
+
+                noise.connect(filter).connect(gain).connect(audioCtx.destination);
+                noise.start(start);
+                noise.stop(start + dur);
+            }
+
+            function playCelebration() {
+                if (!audioCtx) return;
+                const now = audioCtx.currentTime;
+                const notes = [523.25, 659.25, 783.99, 1046.5];
+
+                notes.forEach((f, i) => playTone(f, now + i * 0.12, 0.18, "square", 0.08));
+                notes.forEach(f => playTone(f, now + 0.5, 1.2, "triangle", 0.1));
+                playCheer(now + 0.4, 2.5);
+            }
+
             function getNames() {
                 return textarea.value.split('\n').filter(n => n.trim() !== "");
             }
@@ -164,6 +222,7 @@ Estudiante 5</textarea>
                 
                 winnerText.innerText = names[index];
                 overlay.classList.add("show");
+                playCelebration();
                 
                 const duration = 4000;
                 const end = Date.now() + duration;
@@ -196,6 +255,7 @@ Estudiante 5</textarea>
             function startSpin(e) {
                 if (e.cancelable) e.preventDefault();
                 if (getNames().length === 0) return;
+                initAudio();
                 overlay.classList.remove("show");
                 cancelAnimationFrame(spinTimeout);
                 cancelAnimationFrame(holdAnimation);
