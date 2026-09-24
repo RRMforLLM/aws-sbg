@@ -68,7 +68,7 @@ sudo systemctl status httpd
 
 ```bash
 cd /var/www/html
-sudo wget RAW_URL_DE_GITHUB
+sudo wget https://raw.githubusercontent.com/RRMforLLM/aws-sbg/refs/heads/beta/labs/septiembre/roulette.html
 ```
 
 *(Reemplaza `RAW_URL_DE_GITHUB` por la [URL cruda](#requisitos-previos) del archivo HTML).*
