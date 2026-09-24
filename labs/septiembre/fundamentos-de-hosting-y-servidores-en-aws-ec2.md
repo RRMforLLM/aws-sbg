@@ -70,8 +70,6 @@ sudo systemctl status httpd
 cd /var/www/html
 sudo wget https://raw.githubusercontent.com/RRMforLLM/aws-sbg/refs/heads/beta/labs/septiembre/roulette.html
 ```
-
-
 ### 6 - Ejecución de la aplicación
 
 **Obtén la IP pública de tu instancia con cualquiera de estas opciones:**
@@ -79,7 +77,7 @@ sudo wget https://raw.githubusercontent.com/RRMforLLM/aws-sbg/refs/heads/beta/la
 * **Opción A - Desde la consola**: Regresa a la consola de EC2, selecciona tu instancia y copia el valor de **Public IPv4 address**.
 * **Opción B - Desde la terminal**: En la terminal de EC2 Instance Connect ejecuta el siguiente comando y copia la IP que te regresa:
 ```bash
-curl http://checkip.amazonaws.com
+    curl http://checkip.amazonaws.com
 ```
 
 **Abre la aplicación:**
