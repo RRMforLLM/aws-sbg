@@ -74,10 +74,18 @@ sudo wget https://raw.githubusercontent.com/RRMforLLM/aws-sbg/refs/heads/beta/la
 
 ### 6 - Ejecución de la aplicación
 
-* Regresa a la consola de EC2.
-* Selecciona tu instancia y copia el valor de **Public IPv4 address**.
-* Pega la IP en una nueva pestaña de tu navegador (asegurate de usar `http://` y no `https://`).
-* Accede al archivo HTML añadiendo `/roulette.html` a la dirección en la que ya estás (quedaría como `http://XXX.XX.XXX.XX/roulette.html`)
+**Obtén la IP pública de tu instancia con cualquiera de estas opciones:**
+
+* **Opción A - Desde la consola**: Regresa a la consola de EC2, selecciona tu instancia y copia el valor de **Public IPv4 address**.
+* **Opción B - Desde la terminal**: En la terminal de EC2 Instance Connect ejecuta el siguiente comando y copia la IP que te regresa:
+```bash
+curl http://checkip.amazonaws.com
+```
+
+**Abre la aplicación:**
+
+* Pega la IP en una nueva pestaña de tu navegador (asegúrate de usar `http://` y no `https://`).
+* Accede al archivo HTML añadiendo `/roulette.html` a la dirección en la que ya estás (quedaría como `http://XXX.XX.XXX.XX/roulette.html`).
 * La aplicación debe cargar inmediatamente. Ejecuta un sorteo de prueba.
 
 ### 7 - Limpieza de recursos
