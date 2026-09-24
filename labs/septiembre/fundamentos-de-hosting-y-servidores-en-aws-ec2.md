@@ -6,7 +6,7 @@
 * Navegador web moderno
 * URL cruda (raw) del repositorio de GitHub con el código de la aplicación web (Ruleta)
 ```
-https://raw.githubusercontent.com/RRMforLLM/aws-sbg/refs/heads/beta-version/labs/septiembre/roulette.html
+https://raw.githubusercontent.com/RRMforLLM/aws-sbg/refs/heads/beta/labs/septiembre/roulette.html
 ```
 
 ## Prerrequisito adicional
