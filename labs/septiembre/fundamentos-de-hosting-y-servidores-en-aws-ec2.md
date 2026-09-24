@@ -62,7 +62,6 @@ sudo apt update -y
 sudo apt install -y apache2
 sudo systemctl start apache2
 sudo systemctl enable apache2
-sudo wget -O /var/www/html/index.html https://raw.githubusercontent.com/RRMforLLM/aws-sbg/refs/heads/main/labs/septiembre/roulette.html
 ```
 
 **Verifica que el servicio esté corriendo:**
