@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://dd58xxei4g2vr"]
+
+[ext_resource type="Script" uid="uid://csaocieg0ap2h" path="res://Scripts/zona_muerte.gd" id="1_vu3ft"]
+
+[node name="zona_muerte" type="Area2D" unique_id=246034930]
+script = ExtResource("1_vu3ft")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

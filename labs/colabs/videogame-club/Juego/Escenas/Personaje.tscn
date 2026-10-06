@@ -1,0 +1,189 @@
+[gd_scene format=3 uid="uid://cjorxl317h1va"]
+
+[ext_resource type="Script" uid="uid://8uwyibns8p5p" path="res://Scripts/personaje.gd" id="1_0gco6"]
+[ext_resource type="Texture2D" uid="uid://k4v3er1rfg1v" path="res://Assets/zanahoria_x16.png" id="2_0gco6"]
+[ext_resource type="Shader" uid="uid://1ikxqxx5p18g" path="res://Scripts/Shaders/outline.gdshader" id="2_fj443"]
+[ext_resource type="Texture2D" uid="uid://cmocwfd0ot5pb" path="res://Assets/cartera.png" id="3_0kjke"]
+[ext_resource type="Texture2D" uid="uid://g4hiqoteq5fr" path="res://Assets/zanahoria_pj.png" id="4_tk1jt"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7216l"]
+shader = ExtResource("2_fj443")
+shader_parameter/outline_color = Color(0.5094861, 0.19658077, 9.62615e-08, 1)
+shader_parameter/progress = 1.0
+shader_parameter/width = 0.0170000008075
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0gco6"]
+size = Vector2(10, 16)
+
+[sub_resource type="Animation" id="Animation_0gco6"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ZanahoriaPj:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ZanahoriaPj:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_0kjke"]
+resource_name = "caminar"
+length = 0.4
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ZanahoriaPj:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [1, 0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ZanahoriaPj:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Vector2(0, 0), Vector2(0, -2)]
+}
+
+[sub_resource type="Animation" id="Animation_tk1jt"]
+resource_name = "idle"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ZanahoriaPj:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ZanahoriaPj:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_fj443"]
+_data = {
+&"RESET": SubResource("Animation_0gco6"),
+&"caminar": SubResource("Animation_0kjke"),
+&"idle": SubResource("Animation_tk1jt")
+}
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fj443"]
+atlas = ExtResource("4_tk1jt")
+region = Rect2(17, 0, 5, 8)
+
+[node name="jugador" type="CharacterBody2D" unique_id=568822609 groups=["jugador"]]
+script = ExtResource("1_0gco6")
+
+[node name="ZanahoriaPj" type="Sprite2D" parent="." unique_id=2018405522]
+texture_filter = 1
+material = SubResource("ShaderMaterial_7216l")
+texture = ExtResource("2_0gco6")
+hframes = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1960486365]
+visible = false
+shape = SubResource("RectangleShape2D_0gco6")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=634612669]
+position = Vector2(0, -22)
+zoom = Vector2(1.5, 1.5)
+position_smoothing_enabled = true
+drag_horizontal_enabled = true
+drag_vertical_enabled = true
+drag_horizontal_offset = 0.5
+drag_top_margin = 0.16
+drag_right_margin = 0.04
+drag_bottom_margin = 0.1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=525634869]
+libraries/ = SubResource("AnimationLibrary_fj443")
+
+[node name="hud" type="CanvasLayer" parent="." unique_id=1579856341]
+
+[node name="puntos" type="Panel" parent="hud" unique_id=1526435989]
+clip_contents = true
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = -24.0
+offset_right = 79.0
+offset_bottom = -2.0
+grow_vertical = 0
+
+[node name="TextureRect" type="TextureRect" parent="hud/puntos" unique_id=1774595299]
+texture_filter = 1
+layout_mode = 0
+offset_left = 3.0
+offset_right = 23.0
+offset_bottom = 20.0
+size_flags_horizontal = 3
+texture = ExtResource("3_0kjke")
+stretch_mode = 4
+
+[node name="pts" type="Label" parent="hud/puntos" unique_id=1101757800]
+layout_mode = 0
+offset_left = 22.0
+offset_right = 65.0
+offset_bottom = 22.0
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 10
+text = ": 0"
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="hud" unique_id=453483933]
+texture_filter = 1
+offset_left = 5.0
+offset_top = 3.0
+offset_right = 18.0
+offset_bottom = 24.47826
+texture = SubResource("AtlasTexture_fj443")
+stretch_mode = 4
+
+[node name="vidas" type="Label" parent="hud/TextureRect" unique_id=728423046]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 8.0
+offset_right = 54.0
+offset_bottom = 31.0
+theme_override_font_sizes/font_size = 12
+text = "x00"

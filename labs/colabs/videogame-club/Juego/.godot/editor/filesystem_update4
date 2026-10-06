@@ -1,0 +1,7 @@
+res://Escenas/Personaje.tscn
+res://Scripts/agua.gdshader
+res://Escenas/Tilemap.tres
+res://Scripts/pixel.gdshader
+res://Scripts/pixelado.gdshader
+res://Scripts/personaje.gd
+res://Escenas/nivel_1.tscn
