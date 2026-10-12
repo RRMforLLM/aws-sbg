@@ -65,11 +65,12 @@ from flask import Flask, request, jsonify, render_template_string
 
 app = Flask(__name__)
 
+# Estado inicial exacto basado en variables_juego.json
 game_state = {
     "color": "#ffffff",
     "gravedad": 980,
     "maxima_gravedad": 300,
-    "nombre": "Jugador",
+    "nombre": "",
     "puede_mov": True,
     "puede_saltar": True,
     "puntos": 1000,
@@ -86,32 +87,41 @@ html_ui = """
     <style>
         body { font-family: Arial; padding: 20px; background-color: #f4f4f9; }
         .card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        input[type="number"], input[type="text"], input[type="color"] { width: 100%; padding: 10px; margin: 5px 0 15px; border-radius: 5px; border: 1px solid #ccc; }
+        input[type="range"] { width: 100%; margin: 10px 0 20px; }
+        input[type="color"], input[type="text"], input[type="number"] { width: 100%; padding: 10px; margin: 5px 0 15px; border-radius: 5px; border: 1px solid #ccc; box-sizing: border-box; }
         input[type="checkbox"] { transform: scale(1.5); margin: 10px; }
         button { background: #ff4a4a; color: white; padding: 15px; width: 100%; border: none; border-radius: 5px; font-size: 18px; font-weight: bold; cursor: pointer; }
+        .val { font-weight: bold; color: #ff4a4a; }
     </style>
 </head>
 <body>
     <div class="card">
         <h2>🔥 Panel de Sabotaje 🔥</h2>
         <form action="/update" method="post">
+            
+            <label>Nombre del Jugador:</label>
+            <input type="text" name="nombre" value="{{ state.nombre }}" placeholder="Escribe un nombre...">
+            
             <label>Color del Jugador:</label>
             <input type="color" name="color" value="{{ state.color }}">
             
-            <label>Gravedad:</label>
-            <input type="number" name="gravedad" value="{{ state.gravedad }}">
+            <label>Puntos base:</label>
+            <input type="number" name="puntos" value="{{ state.puntos }}">
             
-            <label>Máxima Gravedad:</label>
-            <input type="number" name="maxima_gravedad" value="{{ state.maxima_gravedad }}">
+            <label>Gravedad: <span class="val" id="v_grav">{{ state.gravedad }}</span></label>
+            <input type="range" name="gravedad" min="0" max="2500" value="{{ state.gravedad }}" oninput="v_grav.innerText=this.value">
             
-            <label>Fuerza de Salto:</label>
-            <input type="number" name="salto" value="{{ state.salto }}">
+            <label>Máxima Gravedad: <span class="val" id="v_maxg">{{ state.maxima_gravedad }}</span></label>
+            <input type="range" name="maxima_gravedad" min="50" max="1500" value="{{ state.maxima_gravedad }}" oninput="v_maxg.innerText=this.value">
             
-            <label>Velocidad:</label>
-            <input type="number" name="velocidad" value="{{ state.velocidad }}">
+            <label>Fuerza de Salto: <span class="val" id="v_salto">{{ state.salto }}</span></label>
+            <input type="range" name="salto" min="-1000" max="-50" value="{{ state.salto }}" oninput="v_salto.innerText=this.value">
             
-            <label>Vidas:</label>
-            <input type="number" name="vidas" value="{{ state.vidas }}">
+            <label>Velocidad: <span class="val" id="v_vel">{{ state.velocidad }}</span></label>
+            <input type="range" name="velocidad" min="10" max="500" value="{{ state.velocidad }}" oninput="v_vel.innerText=this.value">
+            
+            <label>Vidas: <span class="val" id="v_vidas">{{ state.vidas }}</span></label>
+            <input type="range" name="vidas" min="1" max="10" value="{{ state.vidas }}" oninput="v_vidas.innerText=this.value">
             
             <label><input type="checkbox" name="puede_mov" value="true" {% if state.puede_mov %}checked{% endif %}> Puede Moverse</label><br>
             <label><input type="checkbox" name="puede_saltar" value="true" {% if state.puede_saltar %}checked{% endif %}> Puede Saltar</label><br><br>
@@ -129,7 +139,9 @@ def index():
 
 @app.route('/update', methods=['POST'])
 def update():
+    game_state["nombre"] = request.form.get("nombre", game_state["nombre"])
     game_state["color"] = request.form.get("color", game_state["color"])
+    game_state["puntos"] = int(request.form.get("puntos", game_state["puntos"]))
     game_state["gravedad"] = int(request.form.get("gravedad", game_state["gravedad"]))
     game_state["maxima_gravedad"] = int(request.form.get("maxima_gravedad", game_state["maxima_gravedad"]))
     game_state["salto"] = int(request.form.get("salto", game_state["salto"]))
