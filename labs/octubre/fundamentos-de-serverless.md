@@ -58,7 +58,7 @@ def lambda_handler(event, context):
 
 ```
 
-* Da clic en el botón **Deploy** (arriba del editor de código) para guardar y compilar los cambios.
+* Da clic en el botón **Deploy** (en la izquierda del editor de código) para guardar y compilar los cambios.
 
 ### 3 - Exposición a Internet mediante API Gateway
 
