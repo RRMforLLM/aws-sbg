@@ -2,7 +2,7 @@
 
 ## Contexto de la Industria
 
-En septiembre provisionamos un servidor EC2 con Apache. Ese servidor cobra por cada segundo que está encendido, reciba tráfico o no. En la industria moderna, los microservicios utilizan arquitecturas "Serverless" (sin servidor). El código solo se ejecuta cuando hay una petición, reduciendo los costos inactivos a cero y eliminando la necesidad de administrar sistemas operativos.
+En septiembre provisionamos un servidor EC2 con Apache. Ese servidor cobra por cada segundo que está encendido, reciba tráfico o no. En la industria moderna, los microservicios utilizan arquitecturas *serverless* (sin servidor). El código solo se ejecuta cuando hay una petición, reduciendo los costos inactivos a cero y eliminando la necesidad de administrar sistemas operativos.
 
 ## Requisitos previos
 
@@ -20,12 +20,12 @@ Asegúrate de fijar tu consola de AWS en la región `us-east-1` (N. Virginia).
 **Desde la consola de AWS (UI)**
 
 * Navega al servicio **Lambda**.
-* Da clic en **Create function**.
+* Da clic en **Create Event Function**.
 * Selecciona **Author from scratch**.
 * **Function name**: `sbg-uach-api`
-* **Runtime**: Selecciona **Python 3.12** (o la versión más reciente disponible).
-* **Architecture**: Deja **x86_64**.
-* Da clic en **Create function**.
+* **Runtime**: `Python 3.12`
+* **Architecture**: Deja **x86_64**
+* Da clic en **Create Event Function**.
 
 ### 2 - Inyección del código fuente
 
