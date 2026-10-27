@@ -20,18 +20,18 @@ Asegúrate de fijar tu consola de AWS en la región `us-east-1` (N. Virginia).
 **Desde la consola de AWS (UI)**
 
 * Navega al servicio **Lambda**.
-* Da clic en **Create Event Function**.
+* Da clic en **Create Function**.
 * Selecciona **Author from scratch**.
 * **Function name**: `sbg-uach-api`
 * **Runtime**: `Python 3.12`
 * **Architecture**: Deja **x86_64**
-* Da clic en **Create Event Function**.
+* Da clic en **Create Function**.
 
 ### 2 - Inyección del código fuente
 
 * En la página de tu función, baja a la sección **Code source**.
 * Haz doble clic en el archivo `lambda_function.py` para abrir el editor.
-* Reemplaza todo el contenido con el siguiente código de Python. Este código simula un microservicio backend que devuelve datos en formato JSON.
+* Reemplaza todo el contenido con el siguiente código de Python. Este código procesa parámetros de la URL y devuelve una página HTML renderizada dinámicamente.
 
 ```python
 import random
@@ -88,8 +88,8 @@ Las funciones Lambda son privadas por defecto. Para que una aplicación web pued
 
 * Serás redirigido a la vista general de la función. En la pestaña de **Configuration**, selecciona **Triggers**.
 * Verás tu API Gateway listado con un **API endpoint** (una URL que empieza con `https://`).
-* Copia esa URL y pégala en una nueva pestaña de tu navegador.
-* Presiona F5 (Refrescar) varias veces. Verás cómo la respuesta JSON cambia dinámicamente. Cada vez que refrescas, AWS aprovisiona el entorno, ejecuta el código Python y devuelve el resultado en milisegundos.
+* Copia esa URL, pégala en una nueva pestaña de tu navegador y agrega los parámetros `?nombre=TuNombre&color=random` al final de la URL (ejemplo: `[https://...amazonaws.com/default/sbg-uach-api?nombre=Ricardo&color=random](https://...amazonaws.com/default/sbg-uach-api?nombre=Ricardo&color=random)`).
+* Presiona F5 (Refrescar) varias veces. Verás cómo el color de fondo y el código hexadecimal en la página HTML cambian instantáneamente. Cada vez que refrescas, AWS aprovisiona el entorno, ejecuta el código Python y devuelve la interfaz en milisegundos.
 
 ### 5 - Auditoría de ejecución en CloudWatch
 
