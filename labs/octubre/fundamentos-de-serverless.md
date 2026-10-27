@@ -98,10 +98,28 @@ Las funciones Lambda son privadas por defecto. Para que una aplicación web pued
 * Entra al "Log stream" más reciente.
 * Podrás ver el registro exacto de cuántos milisegundos tomó la ejecución de tu código y la memoria que consumió. En la industria, por esto es por lo que pagas: milisegundos de uso, no horas de servidor.
 
-### 6 - Limpieza de recursos
+### 6 - Limpieza de recursos (Prevención de cobros huérfanos)
 
-**Eliminar la función para mantener la cuenta limpia:**
+En arquitecturas de nube, los servicios están desacoplados. Eliminar el cómputo (Lambda) no elimina automáticamente el almacenamiento (CloudWatch) ni las reglas de red (API Gateway). Debes purgar cada capa manualmente.
+
+**A. Eliminar la función Lambda (Cómputo):**
 
 * En la consola de Lambda, selecciona tu función `sbg-uach-api`.
 * En la parte superior derecha, da clic en **Actions** > **Delete**.
-* Confirma la eliminación escribiendo "confirm" si se te solicita. Al eliminar la función Lambda, el trigger de API Gateway asociado también se deshabilita.
+* Confirma la eliminación escribiendo "confirm" si se te solicita.
+
+**B. Eliminar el endpoint en API Gateway (Red):**
+
+* Navega al servicio **API Gateway**.
+* Selecciona el API asociado a tu función (usualmente listado con el mismo nombre).
+* En la parte superior derecha, da clic en **Delete**.
+* Confirma la eliminación.
+
+**C. Limpiar los logs en CloudWatch (Almacenamiento):**
+
+* Navega al servicio **CloudWatch**.
+* En el panel izquierdo, bajo **Logs**, da clic en **Log groups**.
+* Busca el grupo de logs de tu función (generalmente `/aws/lambda/sbg-uach-api`).
+* Selecciónalo marcando la casilla de la izquierda.
+* Da clic en **Actions** en la parte superior derecha y selecciona **Delete log group(s)**.
+* Confirma la eliminación para evitar cargos permanentes por retención de datos inactivos.
