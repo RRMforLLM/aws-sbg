@@ -34,26 +34,39 @@ Asegúrate de fijar tu consola de AWS en la región `us-east-1` (N. Virginia).
 * Reemplaza todo el contenido con el siguiente código de Python. Este código simula un microservicio backend que devuelve datos en formato JSON.
 
 ```python
-import json
 import random
 
 def lambda_handler(event, context):
-    respuestas = [
-        "Es un problema de DNS.",
-        "Funciona en mi maquina local.",
-        "Limpiaste la cache del navegador?",
-        "Reinicia el router."
-    ]
+    nombre = "Estudiante UACH"
+    color = "#232F3E"
     
+    if event.get('queryStringParameters'):
+        nombre = event['queryStringParameters'].get('nombre', nombre)
+        input_color = event['queryStringParameters'].get('color', color)
+        
+        if input_color.lower() == 'random':
+            color = f"#{random.randint(0, 0xFFFFFF):06x}"
+        else:
+            color = input_color
+
+    html_content = f"""
+    <html>
+        <body style="background-color: {color}; color: white; font-family: sans-serif; text-align: center; padding-top: 20%;">
+            <h1>Sorteo Serverless UACH</h1>
+            <h2>Participante: {nombre}</h2>
+            <h1 style="font-size: 4rem; text-transform: uppercase;">Boleto: {color}</h1>
+            <p>Página generada dinámicamente por AWS Lambda.</p>
+        </body>
+    </html>
+    """
+
     return {
         'statusCode': 200,
         'headers': {
-            'Content-Type': 'application/json'
+            'Content-Type': 'text/html',
+            'Cache-Control': 'no-store'
         },
-        'body': json.dumps({
-            'diagnostico_it': random.choice(respuestas),
-            'tecnologia': 'AWS Lambda Serverless'
-        })
+        'body': html_content
     }
 
 ```
