@@ -52,10 +52,10 @@ def lambda_handler(event, context):
     html_content = f"""
     <html>
         <body style="background-color: {color}; color: white; font-family: sans-serif; text-align: center; padding-top: 20%;">
-            <h1>Sorteo Serverless UACH</h1>
-            <h2>Participante: {nombre}</h2>
-            <h1 style="font-size: 4rem; text-transform: uppercase;">Boleto: {color}</h1>
-            <p>Página generada dinámicamente por AWS Lambda.</p>
+            <h1>Serverless UACH</h1>
+            <h2>{nombre}</h2>
+            <h1 style="font-size: 4rem; text-transform: uppercase;">{color}</h1>
+            <p>Pagina generada dinamicamente por AWS Lambda.</p>
         </body>
     </html>
     """
