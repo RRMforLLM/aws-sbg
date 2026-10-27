@@ -91,4 +91,4 @@ Las funciones Lambda son privadas por defecto. Para que una aplicación web pued
 
 * En la consola de Lambda, selecciona tu función `sbg-uach-api`.
 * En la parte superior derecha, da clic en **Actions** > **Delete**.
-* Confirma la eliminación escribiendo "delete" si se te solicita. Al eliminar la función Lambda, el trigger de API Gateway asociado también se deshabilita.
+* Confirma la eliminación escribiendo "confirm" si se te solicita. Al eliminar la función Lambda, el trigger de API Gateway asociado también se deshabilita.
