@@ -39,23 +39,38 @@ import random
 def lambda_handler(event, context):
     nombre = "Estudiante UACH"
     color = "#232F3E"
+    is_lucky = False
     
-    if event.get('queryStringParameters'):
-        nombre = event['queryStringParameters'].get('nombre', nombre)
-        input_color = event['queryStringParameters'].get('color', color)
-        
-        if input_color.lower() == 'random':
-            color = f"#{random.randint(0, 0xFFFFFF):06x}"
-        else:
-            color = input_color
+    params = event.get('queryStringParameters') or {}
+    
+    nombre = params.get('nombre', nombre)
+    input_color = params.get('color', color)
+    
+    if params.get('lucky') in ['1', 'true', 'True']:
+        is_lucky = True
+        color = "#FFD700"
+    elif input_color.lower() == 'random':
+        color = f"#{random.randint(0, 0xFFFFFF):06x}"
+    else:
+        color = input_color
+
+    text_color = "#000000" if is_lucky else "#FFFFFF"
+    
+    lucky_banner = """
+    <div style="background-color: #000000; color: #FFD700; padding: 15px; border-radius: 8px; margin: 20px auto; max-width: 450px; border: 2px solid #FFD700;">
+        <h2 style="margin: 0; font-size: 1.5rem;">¡EASTER EGG DESBLOQUEADO!</h2>
+        <p style="margin: 8px 0 0 0; color: #FFFFFF;">Muestra esta pantalla a alguien de staff para reclamar tu sticker.</p>
+    </div>
+    """ if is_lucky else ""
 
     html_content = f"""
     <html>
-        <body style="background-color: {color}; color: white; font-family: sans-serif; text-align: center; padding-top: 20%;">
+        <body style="background-color: {color}; color: {text_color}; font-family: sans-serif; text-align: center; padding-top: 10%;">
             <h1>Serverless UACH</h1>
             <h2>{nombre}</h2>
             <h1 style="font-size: 4rem; text-transform: uppercase;">{color}</h1>
-            <p>Pagina generada dinamicamente por AWS Lambda.</p>
+            {lucky_banner}
+            <p>Página generada dinámicamente por AWS Lambda.</p>
         </body>
     </html>
     """
