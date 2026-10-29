@@ -24,7 +24,8 @@ Asegúrate de fijar tu consola de AWS en la región `us-east-1` (N. Virginia).
 * Selecciona **Author from scratch**.
 * **Function name**: `sbg-uach-api`
 * **Runtime**: `Python 3.12`
-* **Architecture**: Deja **x86_64**
+* En Additional settings: **Architecture**: Deja **x86_64**<img width="1545" height="171" alt="image" src="https://github.com/user-attachments/assets/61056981-b37c-4aa5-9582-8d6db1dec38d" />
+
 * Da clic en **Create Function**.
 
 ### 2 - Inyección del código fuente
