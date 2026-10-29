@@ -31,6 +31,8 @@ Asegúrate de fijar tu consola de AWS en la región `us-east-1` (N. Virginia).
 ### 2 - Inyección del código fuente
 
 * En la página de tu función, baja a la sección **Code source**.
+* <img width="1561" height="432" alt="image" src="https://github.com/user-attachments/assets/1c117caf-05e4-4601-94e6-d889ecc8e503" />
+
 * Haz doble clic en el archivo `lambda_function.py` para abrir el editor.
 * Reemplaza todo el contenido con el siguiente código de Python. Este código procesa parámetros de la URL y devuelve una página HTML renderizada dinámicamente.
 
