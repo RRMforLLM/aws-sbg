@@ -20,7 +20,7 @@ Asegúrate de fijar tu consola de AWS en la región `us-east-1` (N. Virginia).
 **Desde la consola de AWS (UI)**
 
 * Navega al servicio **Lambda**.
-* Da clic en **Create Function**.
+* Da clic en **Create an Event Function**.
 * Selecciona **Author from scratch**.
 * **Function name**: `sbg-uach-api`
 * **Runtime**: `Python 3.12`
