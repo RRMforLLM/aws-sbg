@@ -33,8 +33,19 @@ ax.plot(x, y, z, color='blue', lw=0.5)
 ax.set_title(f"Atractor de Lorenz (rho={rho})")
 ax.set_axis_off()
 
-# 5. Exportar al servidor web de Apache
-plt.savefig('/var/www/html/lorenz.png', bbox_inches='tight', dpi=150)
+# 5. Exportar los resultados
+# Esta ruta funciona en una instancia EC2 con Apache:
+# plt.savefig('/var/www/html/lorenz.png', bbox_inches='tight', dpi=150)
+# with open('/var/www/html/index.html', 'w') as f:
+#     f.write(html_content)
+#
+# Para ejecutar el laboratorio localmente, guarda ambos archivos junto al script.
+output_dir = os.path.dirname(os.path.abspath(__file__))
+plt.savefig(
+    os.path.join(output_dir, 'lorenz.png'),
+    bbox_inches='tight',
+    dpi=150
+)
 
 html_content = f"""
 <!DOCTYPE html>
@@ -69,7 +80,7 @@ html_content = f"""
 </html>
 """
 
-with open('/var/www/html/index.html', 'w') as f:
+with open(os.path.join(output_dir, 'index.html'), 'w') as f:
     f.write(html_content)
 
 print("¡Éxito! Simulación completada. Entra a la IP de tu EC2 en tu navegador.")

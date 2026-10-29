@@ -1,0 +1,31 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AWS SBG - Math Computacional</title>
+    <style>
+        body { font-family: system-ui; text-align: center; background-color: #f8f9fa; margin-top: 50px; }
+        .container { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: inline-block; }
+        h1 { color: #232F3E; }
+        .math { background: #eee; padding: 10px; border-radius: 5px; font-family: monospace; display: inline-block; text-align: left; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Simulación de Sistemas Dinámicos en AWS</h1>
+        <p>Integración numérica de un modelo caótico procesado en Amazon EC2.</p>
+        
+        <div class="math">
+            dx/dt = &sigma;(y - x)<br>
+            dy/dt = x(&rho; - z) - y<br>
+            dz/dt = xy - &beta;z<br>
+            <br>
+            <strong>Parámetros actuales:</strong><br>
+            &sigma; = 10.0 | &rho; = 28.0 | &beta; = 2.67
+        </div>
+        
+        <br><br>
+        <img src="lorenz.png" alt="Atractor de Lorenz" width="600">
+    </div>
+</body>
+</html>
