@@ -16,8 +16,11 @@ func _on_button_pressed() -> void:
 			
 	var mundo = get_tree().get_first_node_in_group("mundo")
 	mundo.queue_free()
+	await get_tree().process_frame
 	a.hide()
-	jugador.position = Vector2(0,0)
+	await get_tree().process_frame
+	jugador.global_position = global_var.checkpoint
+	await get_tree().process_frame
 	jugador.process_mode = Node.PROCESS_MODE_PAUSABLE
 	await get_tree().process_frame
 	var inst = mundo_nuevo.instantiate()

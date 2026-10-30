@@ -25,7 +25,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.6)
 
-[node name="Button" type="Button" parent="multijuagdor/CanvasLayer" unique_id=955504076]
+[node name="join" type="Button" parent="multijuagdor/CanvasLayer" unique_id=955504076]
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
@@ -39,31 +39,31 @@ grow_horizontal = 2
 grow_vertical = 0
 text = "Unirme"
 
-[node name="LineEdit" type="LineEdit" parent="multijuagdor/CanvasLayer" unique_id=881914309]
+[node name="ip_join" type="LineEdit" parent="multijuagdor/CanvasLayer" unique_id=881914309]
 offset_left = 80.0
 offset_top = 69.0
 offset_right = 232.0
 offset_bottom = 100.0
 placeholder_text = "IP:255.255.255.255"
 
-[node name="Label" type="Label" parent="multijuagdor/CanvasLayer" unique_id=1784329307]
+[node name="nombre" type="LineEdit" parent="multijuagdor/CanvasLayer" unique_id=775634937]
+offset_left = 80.0
+offset_top = 27.0
+offset_right = 232.0
+offset_bottom = 58.0
+placeholder_text = "Nombre"
+
+[node name="ip" type="Label" parent="multijuagdor/CanvasLayer" unique_id=1784329307]
 offset_right = 147.0
 offset_bottom = 23.0
 text = "Ip: 255.255.255.255"
 
-[node name="Button2" type="Button" parent="multijuagdor/CanvasLayer" unique_id=728118080]
+[node name="host" type="Button" parent="multijuagdor/CanvasLayer" unique_id=728118080]
 offset_left = 264.0
 offset_top = 9.0
 offset_right = 308.0
 offset_bottom = 40.0
 text = "Host"
-
-[node name="Button3" type="Button" parent="multijuagdor/CanvasLayer" unique_id=33885881]
-offset_left = 6.0
-offset_top = 144.0
-offset_right = 24.0
-offset_bottom = 175.0
-text = " X "
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="multijuagdor" unique_id=64098420]
 _spawnable_scenes = PackedStringArray("uid://cjorxl317h1va")
@@ -75,6 +75,5 @@ spawn_path = NodePath("../../jugadores")
 position = Vector2(48, 120)
 
 [connection signal="act_variables" from="Servidor_coms" to="." method="_on_servidor_coms_act_variables"]
-[connection signal="pressed" from="multijuagdor/CanvasLayer/Button" to="multijuagdor" method="_on_button_pressed"]
-[connection signal="pressed" from="multijuagdor/CanvasLayer/Button2" to="multijuagdor" method="_on_button_2_pressed"]
-[connection signal="pressed" from="multijuagdor/CanvasLayer/Button3" to="multijuagdor" method="_on_button_3_pressed"]
+[connection signal="pressed" from="multijuagdor/CanvasLayer/join" to="multijuagdor" method="_on_button_pressed"]
+[connection signal="pressed" from="multijuagdor/CanvasLayer/host" to="multijuagdor" method="_on_button_2_pressed"]

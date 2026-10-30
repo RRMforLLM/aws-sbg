@@ -1,14 +1,14 @@
+Label
+Marker2D
 CanvasLayer
 Node
 Node2D
 MultiplayerSpawner
 Button
-Label
 LineEdit
 ColorRect
 MultiplayerSynchronizer
 TileMapLayer
-Marker2D
 AnimatableBody2D
 Line2D
 CollisionShape2D

@@ -24,6 +24,13 @@ var dir2
 @onready var camara = $Camera2D
 @onready var hud: CanvasLayer = $hud
 @onready var multi: MultiplayerSynchronizer = $MultiplayerSynchronizer
+@onready var nombre_lbl: Label = $nombre
+
+@export var nombre_jugador: String = "Invitado":
+	set(nuevo_nombre):
+		nombre_jugador = nuevo_nombre
+		if is_node_ready():
+			nombre_lbl.text = nombre_jugador
 
 func _enter_tree():
 	set_multiplayer_authority(name.to_int())
@@ -38,7 +45,14 @@ func _ready() -> void:
 		sprite.modulate.a = 0.7 
 		hud.hide()
 	else:
+		var mi_nombre = str(global_var.variables.get("nombre", "Jugador"))
+		if mi_nombre == "" or mi_nombre == "<null>":
+			mi_nombre = "Jugador_" + str(name)
+		nombre_jugador = mi_nombre
+		
 		camara.make_current()
+	
+		nombre_lbl.text = nombre_jugador
 		
 func _physics_process(delta: float) -> void:
 	if not is_multiplayer_authority(): return
@@ -114,4 +128,7 @@ func morir():
 	global_var.variables["vidas"] -= 1
 	global_var.variables["puntos"] = 0
 	global_var.puntos_partida = 0
+	if global_var.variables["vidas"] <= 0:
+		global_var.checkpoint = Vector2(48,120)
+		global_var.variables["vidas"] = 3
 	

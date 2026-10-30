@@ -7,6 +7,7 @@ var variables
 var puntos_partida : int = 0
 var puerta_act : int = 1
 var partida_empezada : bool = false
+var checkpoint := Vector2(48,120)
 
 signal actualizacion
 
