@@ -1,19 +1,28 @@
 [gd_scene format=3 uid="uid://cjorxl317h1va"]
 
 [ext_resource type="Script" uid="uid://8uwyibns8p5p" path="res://Scripts/personaje.gd" id="1_0gco6"]
+[ext_resource type="Shader" uid="uid://cifmf6npons4i" path="res://Scripts/Shaders/cambio color.gdshader" id="1_7216l"]
 [ext_resource type="Texture2D" uid="uid://k4v3er1rfg1v" path="res://Assets/zanahoria_x16.png" id="2_0gco6"]
 [ext_resource type="Shader" uid="uid://1ikxqxx5p18g" path="res://Scripts/Shaders/outline.gdshader" id="2_fj443"]
 [ext_resource type="Texture2D" uid="uid://cmocwfd0ot5pb" path="res://Assets/cartera.png" id="3_0kjke"]
 [ext_resource type="Texture2D" uid="uid://g4hiqoteq5fr" path="res://Assets/zanahoria_pj.png" id="4_tk1jt"]
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_7216l"]
+properties/0/path = NodePath(".:global_position")
+properties/0/spawn = true
+properties/0/replication_mode = 2
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7216l"]
-shader = ExtResource("2_fj443")
-shader_parameter/outline_color = Color(0.5094861, 0.19658077, 9.62615e-08, 1)
-shader_parameter/progress = 1.0
-shader_parameter/width = 0.0170000008075
+shader = ExtResource("1_7216l")
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/progress = 0.0
+shader_parameter/width = 0.001
+shader_parameter/color_original = Color(0.96862745, 0.20392157, 0.08627451, 1)
+shader_parameter/color_nuevo = Color(0.48235294, 0, 1, 1)
+shader_parameter/tolerancia = 0.0970000046075
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0gco6"]
-size = Vector2(10, 16)
+size = Vector2(10, 15)
 
 [sub_resource type="Animation" id="Animation_0gco6"]
 length = 0.001
@@ -106,12 +115,21 @@ _data = {
 &"idle": SubResource("Animation_tk1jt")
 }
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fj443"]
+shader = ExtResource("2_fj443")
+shader_parameter/outline_color = Color(0.076875016, 0.076875016, 0.076875016, 1)
+shader_parameter/progress = 1.0
+shader_parameter/width = 0.01200000057
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_fj443"]
 atlas = ExtResource("4_tk1jt")
-region = Rect2(17, 0, 5, 8)
+region = Rect2(16, 0, 7, 9)
 
 [node name="jugador" type="CharacterBody2D" unique_id=568822609 groups=["jugador"]]
 script = ExtResource("1_0gco6")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=963349856]
+replication_config = SubResource("SceneReplicationConfig_7216l")
 
 [node name="ZanahoriaPj" type="Sprite2D" parent="." unique_id=2018405522]
 texture_filter = 1
@@ -121,9 +139,11 @@ hframes = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1960486365]
 visible = false
+position = Vector2(0, 0.5)
 shape = SubResource("RectangleShape2D_0gco6")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=634612669]
+process_mode = 3
 position = Vector2(0, -22)
 zoom = Vector2(1.5, 1.5)
 position_smoothing_enabled = true
@@ -170,20 +190,33 @@ theme_override_font_sizes/font_size = 10
 text = ": 0"
 vertical_alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="hud" unique_id=453483933]
+[node name="vidas_count" type="Panel" parent="hud" unique_id=908462610]
+clip_contents = true
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = -176.0
+offset_right = 43.0
+offset_bottom = -154.0
+grow_vertical = 0
+
+[node name="TextureRect" type="TextureRect" parent="hud/vidas_count" unique_id=453483933]
 texture_filter = 1
-offset_left = 5.0
-offset_top = 3.0
-offset_right = 18.0
-offset_bottom = 24.47826
+material = SubResource("ShaderMaterial_fj443")
+layout_mode = 0
+offset_left = 3.0
+offset_top = 2.0
+offset_right = 16.0
+offset_bottom = 18.0
 texture = SubResource("AtlasTexture_fj443")
 stretch_mode = 4
 
-[node name="vidas" type="Label" parent="hud/TextureRect" unique_id=728423046]
+[node name="vidas" type="Label" parent="hud/vidas_count/TextureRect" unique_id=728423046]
 layout_mode = 0
-offset_left = 14.0
-offset_top = 8.0
-offset_right = 54.0
-offset_bottom = 31.0
+offset_left = 11.0
+offset_top = 3.0
+offset_right = 51.0
+offset_bottom = 26.0
 theme_override_font_sizes/font_size = 12
 text = "x00"

@@ -1,9 +1,7 @@
 extends Node
 
 @export var url : String
-@export_category("JSON")
-@export var arch_nom : String
-@onready var arch_ubi : String = global_var.carpeta + "/" + arch_nom
+@onready var arch_ubi : String = global_var.archivo
 
 @onready var http_request: HTTPRequest = $HTTPRequest
 @onready var anim: AnimationPlayer = $AnimationPlayer
@@ -13,7 +11,8 @@ signal act_variables
 
 func _ready() -> void:
 	global_var.archivo = arch_ubi
-	#print(arch_ubi)
+	print(arch_ubi)
+	#descargar_archivos()
 	carga.hide()
 
 func descargar_archivos():
@@ -39,7 +38,7 @@ func _on_http_request_request_completed(result: int, response_code: int, headers
 			print("No se pudo guardar el archivo:", arch_ubi)
 	else:
 		OS.alert("Error de conexion.\n"+"Código: " + str(response_code),"Error de conexion")
-		print("Error al descargar", arch_nom, "Código:", response_code)
+		print("Error al descargar", "Código:", response_code)
 
 
 func _on_refresh_timeout() -> void:

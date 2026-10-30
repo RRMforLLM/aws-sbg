@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://tb60tiqac6yw"]
+
+[ext_resource type="Script" uid="uid://beharcygke5ld" path="res://Scripts/pincho.gd" id="1_04kkg"]
+[ext_resource type="Texture2D" uid="uid://cf5dapgffdwhw" path="res://Assets/Multi_Platformer_Tileset/SnowLand/Props/SnowLand_IcePick_5.png" id="1_istir"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_04kkg"]
+size = Vector2(12, 8)
+
+[node name="pincho" type="Area2D" unique_id=1867643171]
+script = ExtResource("1_04kkg")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2033370051]
+position = Vector2(0, 4)
+shape = SubResource("RectangleShape2D_04kkg")
+debug_color = Color(0.9843137, 0, 0.17254902, 0.7294118)
+
+[node name="SnowLandIcePick5" type="Sprite2D" parent="." unique_id=1750907051]
+texture_filter = 1
+rotation = 3.1415927
+texture = ExtResource("1_istir")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

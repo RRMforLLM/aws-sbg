@@ -68,7 +68,7 @@ _data = {
 &"flotar": SubResource("Animation_n1bbm")
 }
 
-[node name="moneda" type="Area2D" unique_id=6347322]
+[node name="moneda" type="Area2D" unique_id=6347322 groups=["cristal"]]
 script = ExtResource("1_n1bbm")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=919047998]

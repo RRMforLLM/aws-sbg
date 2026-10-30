@@ -1,7 +1,17 @@
+res://Scripts/multijuagdor.gd
 res://Escenas/Personaje.tscn
-res://Scripts/agua.gdshader
+res://Scripts/Shaders/cambio color.gdshader
+res://Scripts/Shaders/outline.gdshader
+res://Scripts/Shaders/agua.gdshader
 res://Escenas/Tilemap.tres
-res://Scripts/pixel.gdshader
-res://Scripts/pixelado.gdshader
 res://Scripts/personaje.gd
+res://Scripts/pared.gd
 res://Escenas/nivel_1.tscn
+res://Scripts/nvl_manager.gd
+res://Scripts/moneda.gd
+res://Escenas/mundo.tscn
+res://Escenas/pantalla_muerte.tscn
+res://Scripts/pantalla_muerte.gd
+res://Scripts/zona_muerte.gd
+res://Scripts/plataforma.gd
+res://Scripts/pincho.gd

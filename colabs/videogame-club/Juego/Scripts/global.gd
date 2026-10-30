@@ -1,54 +1,51 @@
 extends Node
 
-var jugador_vel : float
-var jugador_salto : float
-var jugador_gravedad : float
-var jugador_pts : int
-var jugador_vidas : int
-var jugador_saltar : bool
-var jugador_moverse : bool
-var jugador_nombre : String
-var jugador_color : Color
-var jugador_max_gravedad : float
+var variables 
 
-var carpeta : String = OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS) + "/Servidor_taller"
-var archivo : String
+@onready var carpeta : String = OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS) + "/Servidor_taller"
+@onready var archivo : String = carpeta + "/variables_juego.json" 
+var puntos_partida : int = 0
+var puerta_act : int = 1
+var partida_empezada : bool = false
+
+signal actualizacion
 
 func _ready() -> void:
-	crear_directorio(carpeta, "carpeta del juego")
-	print(archivo)
-	await get_tree().process_frame
-	crear_archivo(archivo)
+	await crear_directorio(carpeta, "carpeta del juego")
+	await crear_archivo(archivo)
+	obtener_valores()
 
 func obtener_valores():
 	var file = FileAccess.open(archivo,FileAccess.READ)
+	if !file:
+		await get_tree().create_timer(0.2).timeout
+		obtener_valores()
+		return
 	var json = file.get_as_text()
-	var datos = JSON.parse_string(json)
-	
-	jugador_vel = datos["velocidad"]
-	jugador_salto = datos["salto"]
-	jugador_gravedad = datos["gravedad"]
-	jugador_pts = datos["puntos"]
-	jugador_vidas = datos["vidas"]
-	jugador_saltar = datos["puede_saltar"]
-	jugador_moverse = datos["puede_mov"]
-	jugador_nombre = datos["nombre"]
-	jugador_color = datos["color"]
-	jugador_max_gravedad = datos["maxima_gravedad"]
+	variables = JSON.parse_string(json)
+
+	print(variables)
 	
 	file.close()
-
+	actualizacion.emit()
+	
 func crear_directorio(ruta: String, descripcion: String = ""):
 	var base_dir := DirAccess.open(ruta.get_base_dir())
 	
-	if base_dir and not base_dir.dir_exists(ruta):
+	if base_dir and base_dir.dir_exists(ruta):
+		print("Ya existe: ", descripcion)
+		return
+		
+	else:
 		base_dir.make_dir(ruta)
 		print("Carpeta creada:", descripcion, "->", ruta)
-	else:
-		print("Ya existe: ", descripcion)
-
+		
 func crear_archivo(ruta: String):
-	if not FileAccess.file_exists(ruta):
+	if FileAccess.file_exists(ruta):
+		print("El archivo ya existe")
+		return
+		
+	else:
 		var estructura := {
 			"velocidad": 75,
 			"salto": -220,
@@ -57,7 +54,7 @@ func crear_archivo(ruta: String):
 			"vidas": 3,
 			"puede_saltar": true,
 			"puede_mov": true,
-			"nombre": "",
+			"nombre": "tilin",
 			"color": "#ffffff",
 			"maxima_gravedad": 300
 		}
@@ -68,6 +65,8 @@ func crear_archivo(ruta: String):
 			file.close()
 			print("Archivo JSON creado en:", ruta)
 		
-	else:
-		print("El archivo ya existe")
-	
+	#arch_creado.emit()
+
+func carga_confirmada():
+	actualizacion.emit()
+	print("hola")
