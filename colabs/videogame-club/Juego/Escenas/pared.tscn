@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://7yo54chr3opp"]
+
+[ext_resource type="Script" uid="uid://d3hkd6leiubrj" path="res://Scripts/pared.gd" id="1_56qo8"]
+[ext_resource type="Texture2D" uid="uid://dfeaj32qok6rc" path="res://Assets/Multi_Platformer_Tileset/SnowLand/Props/SnowLand_Tree.png" id="2_5uq2f"]
+[ext_resource type="Shader" uid="uid://cifmf6npons4i" path="res://Scripts/Shaders/cambio color.gdshader" id="2_yr50l"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5uq2f"]
+resource_local_to_scene = true
+shader = ExtResource("2_yr50l")
+shader_parameter/outline_color = Color(0.91764706, 0, 0.92941177, 1)
+shader_parameter/progress = 1.0
+shader_parameter/width = 0.018000000855
+shader_parameter/color_original = Color(1, 0.94509804, 0.9098039, 1)
+shader_parameter/color_nuevo = Color(0.91764706, 0.6784314, 0.92941177, 1)
+shader_parameter/tolerancia = 1.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yr50l"]
+size = Vector2(20, 97)
+
+[node name="pared" type="StaticBody2D" unique_id=1054510568]
+script = ExtResource("1_56qo8")
+
+[node name="SnowLandTree" type="Sprite2D" parent="." unique_id=1566228234]
+texture_filter = 1
+material = SubResource("ShaderMaterial_5uq2f")
+position = Vector2(0, -48)
+texture = ExtResource("2_5uq2f")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=2009397656]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1032551268]
+position = Vector2(16, -49.5)
+shape = SubResource("RectangleShape2D_yr50l")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

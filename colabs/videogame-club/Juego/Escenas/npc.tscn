@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://c2p2pv4pstbqb"]
+
+[ext_resource type="Texture2D" uid="uid://bmv8yweuxfrek" path="res://Assets/pablo_x16.png" id="1_e6an2"]
+[ext_resource type="Script" uid="uid://hd6vw14343na" path="res://Scripts/npc.gd" id="2_u58t6"]
+[ext_resource type="Script" uid="uid://3gvdpfpj7y8d" path="res://Scripts/dialogo.gd" id="3_gvjmg"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e6an2"]
+size = Vector2(80, 20)
+
+[sub_resource type="SystemFont" id="SystemFont_u58t6"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_gvjmg"]
+font = SubResource("SystemFont_u58t6")
+font_size = 5
+
+[node name="Npc" type="Sprite2D" unique_id=666810866]
+texture_filter = 1
+texture = ExtResource("1_e6an2")
+script = ExtResource("2_u58t6")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1559206785]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1659464833]
+shape = SubResource("RectangleShape2D_e6an2")
+
+[node name="burbuja" type="PanelContainer" parent="." unique_id=648552130]
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -8.0
+offset_top = -27.0
+offset_right = -7.0
+offset_bottom = -19.0
+grow_horizontal = 2
+grow_vertical = 0
+script = ExtResource("3_gvjmg")
+
+[node name="Label" type="Label" parent="burbuja" unique_id=1766359632]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 12
+label_settings = SubResource("LabelSettings_gvjmg")
+horizontal_alignment = 1
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_body_exited"]

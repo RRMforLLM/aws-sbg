@@ -20,16 +20,19 @@ Asegúrate de fijar tu consola de AWS en la región `us-east-1` (N. Virginia).
 **Desde la consola de AWS (UI)**
 
 * Navega al servicio **Lambda**.
-* Da clic en **Create Function**.
+* Da clic en **Create an Event Function**.
 * Selecciona **Author from scratch**.
 * **Function name**: `sbg-uach-api`
 * **Runtime**: `Python 3.12`
-* **Architecture**: Deja **x86_64**
+* En Additional settings: **Architecture**: Deja **x86_64**<img width="1545" height="171" alt="image" src="https://github.com/user-attachments/assets/61056981-b37c-4aa5-9582-8d6db1dec38d" />
+
 * Da clic en **Create Function**.
 
 ### 2 - Inyección del código fuente
 
 * En la página de tu función, baja a la sección **Code source**.
+* <img width="1561" height="432" alt="image" src="https://github.com/user-attachments/assets/1c117caf-05e4-4601-94e6-d889ecc8e503" />
+
 * Haz doble clic en el archivo `lambda_function.py` para abrir el editor.
 * Reemplaza todo el contenido con el siguiente código de Python. Este código procesa parámetros de la URL y devuelve una página HTML renderizada dinámicamente.
 

@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://d1wsqx6ww668e"]
+
+[ext_resource type="Texture2D" uid="uid://cf47a71t3mbfh" path="res://Assets/Multi_Platformer_Tileset/SnowLand/Terrain/SnowLand_Terrain_Tileset.png" id="1_0gq4w"]
+[ext_resource type="Script" uid="uid://buhv318n7aia" path="res://Scripts/plataforma_movible.gd" id="1_ee0p5"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ee0p5"]
+atlas = ExtResource("1_0gq4w")
+region = Rect2(16, 96, 48, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_q60lr"]
+size = Vector2(48, 9)
+
+[node name="plataforma_mov" type="AnimatableBody2D" unique_id=499974369]
+script = ExtResource("1_ee0p5")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1247649041]
+z_index = 1
+texture_filter = 1
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+texture = SubResource("AtlasTexture_ee0p5")
+expand_mode = 2
+stretch_mode = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=264163817]
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_q60lr")
+
+[node name="Line2D" type="Line2D" parent="." unique_id=294823188]
+top_level = true
+width = 1.0
