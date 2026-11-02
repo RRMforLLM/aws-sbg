@@ -69,7 +69,7 @@ científico en EC2 basado en el atractor de Lorenz:
 [`colabs/videogame-club/`](colabs/videogame-club/) explora Live Ops y
 sincronización de estado entre un juego y un backend:
 
-- [`fundamentos-de-live-ops.md`](colabs/videogame-club/fundamentos-de-live-ops.md):
+- [`README.md`](colabs/videogame-club/README.md):
   laboratorio con EC2, Flask y una interfaz para modificar el estado del juego.
 - [`Juego/`](colabs/videogame-club/Juego/): proyecto Godot 4.x.
   Incluye configuración del proyecto, recursos gráficos en `Assets/`, escenas
