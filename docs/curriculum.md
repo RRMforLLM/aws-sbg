@@ -123,6 +123,7 @@ Lambda
 API Gateway y DynamoDB
    ↓
 Bedrock y Braket
+```
 
 Los primeros cuatro módulos forman la ruta principal de desarrollo de aplicaciones
 en AWS. Bedrock y Braket son módulos exploratorios que amplían el programa hacia la
@@ -133,15 +134,31 @@ inteligencia artificial generativa y la computación cuántica.
 Cada módulo del currículo debe contener, cuando corresponda:
 
 - `README.md`: descripción general, objetivos y resultados esperados.
-- `prerequisites.md`: cuentas, software y conocimientos previos requeridos.
-- `resources.md`: referencias y material de apoyo.
-- `presentation.pdf`: presentación utilizada durante la sesión.
+- `prerrequisitos.md`: cuentas, software y conocimientos previos requeridos.
+- `recursos.md`: referencias y material de apoyo.
+- `presentacion.pdf`: presentación utilizada durante la sesión.
 - Código de ejemplo o recursos necesarios para el laboratorio.
 
-## Trabajo relacionado
+## Material complementario
 
 El currículo contiene la ruta de aprendizaje base del AWS SBG.
 
 Los experimentos independientes, clubes y proyectos aplicados pertenecen a
 [`colabs/`](../colabs/). Pueden reutilizar conceptos de uno o más módulos del
-currículo sin formar parte de la secuencia principal.
+currículo sin formar parte de la secuencia principal:
+
+- [`colabs/math-club/`](../colabs/math-club/): laboratorio de cómputo científico
+  en EC2 basado en el atractor de Lorenz.
+- [`colabs/videogame-club/`](../colabs/videogame-club/): proyecto Godot y
+  laboratorio de Live Ops con EC2 y Flask.
+
+Los talleres independientes se encuentran en
+[`workshops/`](../workshops/). Actualmente incluye
+[`amplify-s3-space-talk/`](../workshops/amplify-s3-space-talk/), sobre
+ingestión de archivos grandes con Next.js, AWS Amplify, URLs prefirmadas y S3.
+
+El material de encuentros se conserva en
+[`meetups/`](../meetups/). Las fechas y el estado de las sesiones del currículo
+siguen siendo responsabilidad de [`docs/roadmap.md`](roadmap.md); los workshops,
+meetups y colaboraciones no forman parte de esa secuencia salvo que se indique
+explícitamente.

@@ -33,7 +33,9 @@ Antes de comenzar, asegúrate de fijar tu consola de AWS en una región específ
 * **Security group name**: `sbg-liveops-sg`
 * **Inbound security group rules**:
 * Regla 1: Type `SSH`, Port `22`, Source `Anywhere` (`0.0.0.0/0`)
-* Regla 2: Da clic en **Add security group rule**. Type `Custom TCP`, Port `8000`, Source `Anywhere` (`0.0.0.0/0`)
+* Regla 2: Da clic en **Add security group rule**. Type `HTTP`, Port `80`, Source `Anywhere` (`0.0.0.0/0`)
+* Regla 3: Da clic en **Add security group rule**. Type `HTTPS`, Port `443`, Source `Anywhere` (`0.0.0.0/0`)
+* Regla 4: Da clic en **Add security group rule**. Type `Custom TCP`, Port `8000`, Source `Anywhere` (`0.0.0.0/0`)
 
 Da clic en **Launch instance** y espera a que el estado cambie a *Running*.
 
