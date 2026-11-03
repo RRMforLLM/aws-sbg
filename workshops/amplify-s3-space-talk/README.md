@@ -10,6 +10,8 @@ En este laboratorio cada equipo despliega una aplicación web que envía los arc
 2. La API Route usa el AWS SDK para generar una URL temporal, firmada con las credenciales del servidor.
 3. El frontend sube el archivo con un `PUT` directo a esa URL, sin pasar por el servidor.
 
+Después, la misma aplicación consulta esos archivos: la API los lista y genera una URL temporal de lectura, y el navegador los descarga directo de S3. Amplify y S3 son servicios separados: la aplicación solo puede hacer con el bucket lo que permiten sus credenciales.
+
 **Vercel y Amplify:** Vercel es excelente para desplegar interfaces ligeras. Aquí usamos AWS Amplify y S3 porque el almacenamiento, los permisos y el hosting quedan en una sola cuenta de AWS, lo que da una base real para ingerir datos a escala de gigabytes. El patrón de URLs prefirmadas es lo que elimina el límite; también funcionaría desde Vercel apuntando a S3.
 
 ## Requisitos previos
@@ -83,9 +85,11 @@ La API necesita credenciales para firmar las URLs. Una URL prefirmada solo puede
 ### 3 - Copia del repositorio
 
 * Abre el repositorio base y da clic en **Fork** para crear una copia en tu cuenta de GitHub.
-* Revisa estos tres archivos antes de continuar:
+* Revisa estos archivos antes de continuar:
   * `app/page.tsx`: pide la URL a la API con `GET` y sube el archivo con `PUT`.
   * `app/api/upload/route.ts`: crea el `S3Client` y genera la URL con `PutObjectCommand` y `getSignedUrl`.
+  * `app/api/files/route.ts`: lista los archivos de `uploads/` con `ListObjectsV2Command`.
+  * `app/api/files/open/route.ts`: genera una URL de lectura con `GetObjectCommand` y redirige al navegador.
   * `amplify.yml`: copia las variables de entorno a `.env.production` durante la compilación. Sin este paso, Next.js [no puede leerlas en el servidor](https://docs.aws.amazon.com/amplify/latest/userguide/ssr-environment-variables.html).
 
 ### 4 - Despliegue en AWS Amplify
@@ -111,7 +115,7 @@ Los nombres empiezan con `S3_` porque Amplify [no permite crear variables con el
 
 ### 5 - Primera subida (bloqueo esperado)
 
-* Abre tu aplicación y presiona **F12** para ver la pestaña **Console**.
+* Abre tu aplicación y presiona **F12** para ver la pestaña **Console**. El panel **Archivos en S3** muestra `AccessDenied`: es esperado y lo resolvemos en el paso 8.
 * Selecciona tu archivo de la NASA y da clic en **Subir a S3**.
 * Verifica que la subida falle con un error de CORS en la consola.
 
@@ -149,7 +153,50 @@ El origen debe coincidir exactamente: con `https://` y sin `/` al final.
 * En **Network**, identifica la petición a `/api/upload` y el `PUT` al dominio `s3.us-east-1.amazonaws.com`. El archivo completo viaja en el `PUT`, no en la petición a tu API.
 * En la consola de S3, abre `uploads/` en tu bucket y confirma que el tamaño del objeto coincide con tu archivo.
 
-### 8 - Registro de tiempos
+### 8 - Ampliación de permisos para consultar los datos
+
+Tu archivo ya está en S3, pero la aplicación no puede verlo: el panel **Archivos en S3** sigue mostrando `AccessDenied`. Su usuario IAM solo tiene permiso para escribir.
+
+* En **IAM** > **Users**, entra a `sbg-nasa-api-<equipo>`.
+* En la pestaña **Permissions**, abre la política `sbg-nasa-putobject` y da clic en **Edit**.
+* En la vista **JSON**, reemplaza todo con lo siguiente, sustituyendo `<equipo>`:
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "PermitirSubirYLeer",
+      "Effect": "Allow",
+      "Action": ["s3:PutObject", "s3:GetObject"],
+      "Resource": "arn:aws:s3:::sbg-uach-nasa-<equipo>/uploads/*"
+    },
+    {
+      "Sid": "PermitirListarUploads",
+      "Effect": "Allow",
+      "Action": "s3:ListBucket",
+      "Resource": "arn:aws:s3:::sbg-uach-nasa-<equipo>",
+      "Condition": {
+        "StringLike": { "s3:prefix": "uploads/*" }
+      }
+    }
+  ]
+}
+```
+
+* Da clic en **Next** y luego en **Save changes**.
+
+`s3:ListBucket` aplica sobre el bucket, por eso su `Resource` no lleva `/*`. Las acciones sobre archivos sí lo llevan. No necesitas volver a desplegar, porque los permisos se evalúan en cada petición.
+
+### 9 - Consulta de los archivos
+
+* Regresa a tu aplicación, deja abierta la pestaña **Network** y da clic en **Actualizar** en el panel **Archivos en S3**. Tu archivo debe aparecer con su tamaño y fecha. Si sigue el error, espera unos segundos y vuelve a intentar.
+* Da clic en **Descargar**. En **Network**, identifica la petición a `/api/files/open` con respuesta `302` y la redirección al dominio de S3.
+* Da clic en **Abrir**. El archivo se abre en una pestaña nueva desde S3. Un PNG de 176 MB puede tardar en mostrarse.
+
+El listado pasa por el servidor, así que el navegador no habla con S3. Abrir o descargar es una navegación normal, no una petición de JavaScript, así que CORS no aplica y tampoco cambia. En ambos casos, el archivo nunca pasa por Amplify.
+
+### 10 - Registro de tiempos
 
 Anota los tiempos de tu equipo y compártelos con el staff.
 
@@ -160,8 +207,9 @@ Anota los tiempos de tu equipo y compártelos con el staff.
 | Diagnóstico y corrección de CORS (pasos 5 y 6) | |
 | Subida del archivo (paso 7) | |
 | Velocidad de subida en MB/s (paso 7) | |
+| Ampliación de permisos y consulta (pasos 8 y 9) | |
 
-### 9 - Auditoría con CloudTrail
+### 11 - Auditoría con CloudTrail
 
 * Navega a **CloudTrail** > **Event history**.
 * Filtra por **Resource name** con el nombre de tu bucket.
@@ -169,7 +217,7 @@ Anota los tiempos de tu equipo y compártelos con el staff.
 
 Las subidas (`PutObject`) no aparecen aquí: son eventos de datos, y CloudTrail no los registra por defecto.
 
-### 10 - Limpieza de recursos
+### 12 - Limpieza de recursos
 
 **A. Eliminar la aplicación de Amplify (Hosting):**
 
@@ -204,6 +252,8 @@ Firmar una URL no contacta a AWS, así que unas credenciales incorrectas no fall
 | La API responde `Faltan variables de entorno` | Falta una variable, o se agregó después de compilar | Corrige el nombre y vuelve a desplegar: `.env.production` se genera en la compilación |
 | Error de CORS en la consola del navegador | El bucket no tiene CORS, o el origen no coincide | Compara el origen con tu dominio exacto (paso 6) |
 | `403 AccessDenied` en el `PUT` | La política no cubre ese bucket o la ruta `uploads/*` | Revisa el `Resource` de la política (paso 2) |
+| `AccessDenied` en el panel **Archivos en S3** | Falta `s3:ListBucket`, o su `Resource` lleva `/*` | Revisa la política (paso 8) |
+| XML con `AccessDenied` al abrir o descargar | Falta `s3:GetObject` sobre `uploads/*` | Revisa la política (paso 8) |
 | `403 InvalidAccessKeyId` | Access key incorrecta o eliminada | Corrige `S3_ACCESS_KEY_ID` y vuelve a desplegar |
 | `403 SignatureDoesNotMatch` | Secret incorrecto, a menudo con espacios al copiarlo | Corrige `S3_SECRET_ACCESS_KEY` y vuelve a desplegar |
 | `403` con el mensaje `Request has expired` | Pasaron más de 15 minutos desde que se generó la URL | Intenta la subida de nuevo para obtener otra URL |
@@ -217,11 +267,11 @@ Cada cambio de variables requiere un nuevo despliegue. Un cambio de CORS se apli
 * **Credenciales de larga duración**
   * Este laboratorio usa claves de acceso por simplicidad. Amplify [recomienda no guardar secretos en variables de entorno](https://docs.aws.amazon.com/amplify/latest/userguide/environment-variables.html). En producción, usa un rol IAM para el cómputo de la aplicación.
 * **Autenticación de la API**
-  * La ruta `/api/upload` es pública: cualquiera con el enlace puede obtener una URL y escribir en tu bucket. En producción, exige una sesión antes de firmar.
+  * La ruta `/api/upload` es pública: cualquiera con el enlace puede obtener una URL y escribir en tu bucket. Desde el paso 8, también puede ver y descargar todos los archivos de `uploads/`. No subas datos privados en este laboratorio. En producción, exige una sesión antes de listar o firmar.
 * **Tamaño de los archivos**
   * Una URL prefirmada para `PUT` no limita el tamaño del archivo, y el almacenamiento genera costos. Controla el tamaño y agrega reglas de ciclo de vida al bucket.
 * **Principio de Privilegio Mínimo (PoLP)**
-  * Limita cada credencial a la acción y la ruta que necesita, como `s3:PutObject` sobre `uploads/*`.
+  * Limita cada credencial a la acción y la ruta que necesita, como `s3:PutObject` y `s3:GetObject` sobre `uploads/*`. Agrega un permiso solo cuando la aplicación lo necesite.
 * **Vigencia de las URLs**
   * Una URL prefirmada funciona para quien la tenga hasta que expira. Mantén vigencias cortas y no la guardes en logs.
 * **Bloqueo del acceso público**
