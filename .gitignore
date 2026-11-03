@@ -1,1 +1,8 @@
 .DS_Store
+
+workshops/amplify-s3-space-talk/nasa-s3-ingest/node_modules/
+workshops/amplify-s3-space-talk/nasa-s3-ingest/.next/
+workshops/amplify-s3-space-talk/nasa-s3-ingest/.env*
+workshops/amplify-s3-space-talk/nasa-s3-ingest/!.env.example
+workshops/amplify-s3-space-talk/nasa-s3-ingest/next-env.d.ts
+workshops/amplify-s3-space-talk/nasa-s3-ingest/*.tsbuildinfo
