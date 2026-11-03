@@ -20,7 +20,7 @@ En este laboratorio cada equipo despliega una aplicación web que envía los arc
 * Repositorio base del laboratorio:
 
 ```
-https://github.com/RRMforLLM/aws-sbg/tree/main/workshops/amplify-s3-space-talk/nasa-s3-ingest
+https://github.com/RRMforLLM/nasa-s3-ingest
 ```
 
 * Un archivo de prueba mayor a 4.5 MB. Descarga con anticipación el PNG de 21600 x 10800 (unos 176 MB) de [Blue Marble Next Generation](https://visibleearth.nasa.gov/images/73751/july-blue-marble-next-generation-w-topography-and-bathymetry/73765l) de la NASA.
