@@ -16,16 +16,18 @@ Después, la misma aplicación consulta esos archivos: la API los lista y genera
 
 ## Requisitos previos
 
-* Cuenta de AWS activa.
-* Cuenta de GitHub.
-* Navegador web moderno. Todo el laboratorio se hace desde la consola: no necesitas AWS CLI ni instalar Node.js.
-* Repositorio base del laboratorio:
+- Cuenta de AWS activa.
+- Cuenta de GitHub.
+- Navegador web moderno. Todo el laboratorio se hace desde la consola: no necesitas AWS CLI ni instalar Node.js.
+- Repositorio base del laboratorio:
+
+```text
+[https://github.com/RRMforLLM/nasa-s3-ingest](https://github.com/RRMforLLM/nasa-s3-ingest)
 
 ```
-https://github.com/RRMforLLM/nasa-s3-ingest
-```
 
-* Un archivo de prueba mayor a 4.5 MB. Descarga con anticipación el PNG de 21600 x 10800 (unos 176 MB) de [Blue Marble Next Generation](https://visibleearth.nasa.gov/images/73751/july-blue-marble-next-generation-w-topography-and-bathymetry/73765l) de la NASA.
+* Un archivo de prueba científico. Descarga con anticipación el dataset NetCDF de temperaturas (aprox. 45 MB) directamente de la NOAA:
+`https://downloads.psl.noaa.gov/Datasets/NARR/Dailies/monolevel/air.2m.2023.nc`
 
 ## Prerrequisito adicional
 
@@ -71,6 +73,7 @@ La API necesita credenciales para firmar las URLs. Una URL prefirmada solo puede
     }
   ]
 }
+
 ```
 
 * **Policy name**: `sbg-nasa-putobject`
@@ -86,11 +89,13 @@ La API necesita credenciales para firmar las URLs. Una URL prefirmada solo puede
 
 * Abre el repositorio base y da clic en **Fork** para crear una copia en tu cuenta de GitHub.
 * Revisa estos archivos antes de continuar:
-  * `app/page.tsx`: pide la URL a la API con `GET` y sube el archivo con `PUT`.
-  * `app/api/upload/route.ts`: crea el `S3Client` y genera la URL con `PutObjectCommand` y `getSignedUrl`.
-  * `app/api/files/route.ts`: lista los archivos de `uploads/` con `ListObjectsV2Command`.
-  * `app/api/files/open/route.ts`: genera una URL de lectura con `GetObjectCommand` y redirige al navegador.
-  * `amplify.yml`: copia las variables de entorno a `.env.production` durante la compilación. Sin este paso, Next.js [no puede leerlas en el servidor](https://docs.aws.amazon.com/amplify/latest/userguide/ssr-environment-variables.html).
+* `app/page.tsx`: pide la URL a la API con `GET` y sube el archivo con `PUT`.
+* `app/api/upload/route.ts`: crea el `S3Client` y genera la URL con `PutObjectCommand` y `getSignedUrl`.
+* `app/api/files/route.ts`: lista los archivos de `uploads/` con `ListObjectsV2Command`.
+* `app/api/files/open/route.ts`: genera una URL de lectura con `GetObjectCommand` y redirige al navegador.
+* `amplify.yml`: copia las variables de entorno a `.env.production` durante la compilación. Sin este paso, Next.js [no puede leerlas en el servidor](https://docs.aws.amazon.com/amplify/latest/userguide/ssr-environment-variables.html).
+
+
 
 ### 4 - Despliegue en AWS Amplify
 
@@ -108,7 +113,7 @@ La API necesita credenciales para firmar las URLs. Una URL prefirmada solo puede
 | `S3_ACCESS_KEY_ID` | El Access key del paso 2 |
 | `S3_SECRET_ACCESS_KEY` | El Secret access key del paso 2 |
 
-Los nombres empiezan con `S3_` porque Amplify [no permite crear variables con el prefijo `AWS`](https://docs.aws.amazon.com/amplify/latest/userguide/environment-variables.html).
+Los nombres empiezan con `S3_` porque Amplify [no permite crear variables con el prefijo `AWS](https://docs.aws.amazon.com/amplify/latest/userguide/environment-variables.html)`.
 
 * Da clic en **Next** y luego en **Save and deploy**.
 * Espera a que la compilación termine. Copia el dominio de tu aplicación, que tiene la forma `https://main.<APP_ID>.amplifyapp.com`.
@@ -116,7 +121,7 @@ Los nombres empiezan con `S3_` porque Amplify [no permite crear variables con el
 ### 5 - Primera subida (bloqueo esperado)
 
 * Abre tu aplicación y presiona **F12** para ver la pestaña **Console**. El panel **Archivos en S3** muestra `AccessDenied`: es esperado y lo resolvemos en el paso 8.
-* Selecciona tu archivo de la NASA y da clic en **Subir a S3**.
+* Selecciona tu archivo NetCDF de la NOAA y da clic en **Subir a S3**.
 * Verifica que la subida falle con un error de CORS en la consola.
 
 La API sí generó la URL. El bloqueo ocurre porque el navegador pregunta a S3 si tu dominio puede hacer un `PUT`, y S3 todavía no lo autoriza.
@@ -140,6 +145,7 @@ La API sí generó la URL. El bloqueo ocurre porque el navegador pregunta a S3 s
     "MaxAgeSeconds": 3000
   }
 ]
+
 ```
 
 * Da clic en **Save changes**.
@@ -182,6 +188,7 @@ Tu archivo ya está en S3, pero la aplicación no puede verlo: el panel **Archiv
     }
   ]
 }
+
 ```
 
 * Da clic en **Next** y luego en **Save changes**.
@@ -191,25 +198,71 @@ Tu archivo ya está en S3, pero la aplicación no puede verlo: el panel **Archiv
 ### 9 - Consulta de los archivos
 
 * Regresa a tu aplicación, deja abierta la pestaña **Network** y da clic en **Actualizar** en el panel **Archivos en S3**. Tu archivo debe aparecer con su tamaño y fecha. Si sigue el error, espera unos segundos y vuelve a intentar.
-* Da clic en **Descargar**. En **Network**, identifica la petición a `/api/files/open` con respuesta `302` y la redirección al dominio de S3.
-* Da clic en **Abrir**. El archivo se abre en una pestaña nueva desde S3. Un PNG de 176 MB puede tardar en mostrarse.
+* Da clic en **Descargar**. En **Network**, identifica la petición a `/api/files/open` con respuesta `302` y la redirección al dominio de S3. El archivo NetCDF comenzará a descargarse a tu equipo.
 
-El listado pasa por el servidor, así que el navegador no habla con S3. Abrir o descargar es una navegación normal, no una petición de JavaScript, así que CORS no aplica y tampoco cambia. En ambos casos, el archivo nunca pasa por Amplify.
+El listado pasa por el servidor, así que el navegador no habla con S3. Descargar es una navegación normal, no una petición de JavaScript, así que CORS no aplica y tampoco cambia. En ambos casos, el archivo nunca pasa por Amplify.
 
-### 10 - Registro de tiempos
+### 10 - Conexión con Data Science (Python y Boto3)
+
+En un entorno real de hackathon, el equipo es distribuido. Un integrante ingiere los datos desde la interfaz web, y otro los extrae desde la nube a su entorno de desarrollo local.
+
+Para demostrar esta conexión, abre Google Colab o un Jupyter Notebook local y ejecuta el siguiente script para descargar y leer el dataset directamente en tu entorno de procesamiento.
+
+**Instalación de dependencias:**
+
+```bash
+pip install boto3 xarray netCDF4
+
+```
+
+**Script de extracción:**
+
+```python
+import boto3
+import xarray as xr
+
+# Credenciales IAM generadas en el Paso 2
+s3 = boto3.client(
+    's3',
+    region_name='us-east-1',
+    aws_access_key_id='TU_ACCESS_KEY',
+    aws_secret_access_key='TU_SECRET_KEY'
+)
+
+bucket_name = 'sbg-uach-nasa-<equipo>'
+file_key = 'uploads/air.2m.2023.nc'
+local_file = 'air.2m.2023.nc'
+
+print("Descargando dataset de 300MB desde S3...")
+# Descarga a disco local en lugar de RAM para evitar cuelgues en entornos limitados
+s3.download_file(bucket_name, file_key, local_file)
+
+print("Procesando NetCDF...")
+# Abrir el dataset científico
+ds = xr.open_dataset(local_file)
+
+# Imprimir los metadatos y dimensiones para comprobar lectura exitosa
+print(ds)
+
+```
+
+Esto demuestra la arquitectura final: la infraestructura serverless maneja la ingesta pesada, y Python interactúa directamente con el bucket S3 como un *Data Lake* centralizado, sin pasar por el frontend.
+
+### 11 - Registro de tiempos
 
 Anota los tiempos de tu equipo y compártelos con el staff.
 
 | Etapa | Tiempo medido |
 | --- | --- |
-| Bucket y usuario IAM (pasos 1 y 2) | |
-| Copia del repositorio y primera compilación (pasos 3 y 4) | |
-| Diagnóstico y corrección de CORS (pasos 5 y 6) | |
-| Subida del archivo (paso 7) | |
-| Velocidad de subida en MB/s (paso 7) | |
-| Ampliación de permisos y consulta (pasos 8 y 9) | |
+| Bucket y usuario IAM (pasos 1 y 2) |  |
+| Copia del repositorio y primera compilación (pasos 3 y 4) |  |
+| Diagnóstico y corrección de CORS (pasos 5 y 6) |  |
+| Subida del archivo (paso 7) |  |
+| Velocidad de subida en MB/s (paso 7) |  |
+| Ampliación de permisos y consulta (pasos 8 y 9) |  |
+| Conexión con Python (paso 10) |  |
 
-### 11 - Auditoría con CloudTrail
+### 12 - Auditoría con CloudTrail
 
 * Navega a **CloudTrail** > **Event history**.
 * Filtra por **Resource name** con el nombre de tu bucket.
@@ -217,7 +270,7 @@ Anota los tiempos de tu equipo y compártelos con el staff.
 
 Las subidas (`PutObject`) no aparecen aquí: son eventos de datos, y CloudTrail no los registra por defecto.
 
-### 12 - Limpieza de recursos
+### 13 - Limpieza de recursos
 
 **A. Eliminar la aplicación de Amplify (Hosting):**
 
@@ -248,7 +301,7 @@ Firmar una URL no contacta a AWS, así que unas credenciales incorrectas no fall
 
 | Síntoma | Causa probable | Solución |
 | --- | --- | --- |
-| La compilación falla en el comando `env \| grep` | No hay ninguna variable `S3_*` en Amplify | Agrega las cuatro variables y vuelve a desplegar |
+| La compilación falla en el comando `env | grep` | No hay ninguna variable `S3_*` en Amplify | Agrega las cuatro variables y vuelve a desplegar |
 | La API responde `Faltan variables de entorno` | Falta una variable, o se agregó después de compilar | Corrige el nombre y vuelve a desplegar: `.env.production` se genera en la compilación |
 | Error de CORS en la consola del navegador | El bucket no tiene CORS, o el origen no coincide | Compara el origen con tu dominio exacto (paso 6) |
 | `403 AccessDenied` en el `PUT` | La política no cubre ese bucket o la ruta `uploads/*` | Revisa el `Resource` de la política (paso 2) |
@@ -258,21 +311,31 @@ Firmar una URL no contacta a AWS, así que unas credenciales incorrectas no fall
 | `403 SignatureDoesNotMatch` | Secret incorrecto, a menudo con espacios al copiarlo | Corrige `S3_SECRET_ACCESS_KEY` y vuelve a desplegar |
 | `403` con el mensaje `Request has expired` | Pasaron más de 15 minutos desde que se generó la URL | Intenta la subida de nuevo para obtener otra URL |
 | Redirección o error de CORS solo con ciertos valores de región | `S3_REGION` no es la región del bucket | Usa la región exacta del bucket y vuelve a desplegar |
-| La aplicación rechaza un archivo mayor a 5 GB | Es el [máximo de S3 para un solo `PUT`](https://docs.aws.amazon.com/AmazonS3/latest/userguide/upload-objects.html) | Fuera del alcance de este laboratorio: se requiere carga multiparte |
+| La aplicación rechaza un archivo mayor a 5 GB | Es el [máximo de S3 para un solo `PUT](https://docs.aws.amazon.com/AmazonS3/latest/userguide/upload-objects.html)` | Fuera del alcance de este laboratorio: se requiere carga multiparte |
 
 Cada cambio de variables requiere un nuevo despliegue. Un cambio de CORS se aplica sin desplegar, pero recarga la página: el navegador puede conservar la respuesta anterior hasta `MaxAgeSeconds`.
 
 ## Recomendaciones de seguridad
 
 * **Credenciales de larga duración**
-  * Este laboratorio usa claves de acceso por simplicidad. Amplify [recomienda no guardar secretos en variables de entorno](https://docs.aws.amazon.com/amplify/latest/userguide/environment-variables.html). En producción, usa un rol IAM para el cómputo de la aplicación.
+* Este laboratorio usa claves de acceso por simplicidad. Amplify [recomienda no guardar secretos en variables de entorno](https://docs.aws.amazon.com/amplify/latest/userguide/environment-variables.html). En producción, usa un rol IAM para el cómputo de la aplicación.
+
+
 * **Autenticación de la API**
-  * La ruta `/api/upload` es pública: cualquiera con el enlace puede obtener una URL y escribir en tu bucket. Desde el paso 8, también puede ver y descargar todos los archivos de `uploads/`. No subas datos privados en este laboratorio. En producción, exige una sesión antes de listar o firmar.
+* La ruta `/api/upload` es pública: cualquiera con el enlace puede obtener una URL y escribir en tu bucket. Desde el paso 8, también puede ver y descargar todos los archivos de `uploads/`. No subas datos privados en este laboratorio. En producción, exige una sesión antes de listar o firmar.
+
+
 * **Tamaño de los archivos**
-  * Una URL prefirmada para `PUT` no limita el tamaño del archivo, y el almacenamiento genera costos. Controla el tamaño y agrega reglas de ciclo de vida al bucket.
+* Una URL prefirmada para `PUT` no limita el tamaño del archivo, y el almacenamiento genera costos. Controla el tamaño y agrega reglas de ciclo de vida al bucket.
+
+
 * **Principio de Privilegio Mínimo (PoLP)**
-  * Limita cada credencial a la acción y la ruta que necesita, como `s3:PutObject` y `s3:GetObject` sobre `uploads/*`. Agrega un permiso solo cuando la aplicación lo necesite.
+* Limita cada credencial a la acción y la ruta que necesita, como `s3:PutObject` y `s3:GetObject` sobre `uploads/*`. Agrega un permiso solo cuando la aplicación lo necesite.
+
+
 * **Vigencia de las URLs**
-  * Una URL prefirmada funciona para quien la tenga hasta que expira. Mantén vigencias cortas y no la guardes en logs.
+* Una URL prefirmada funciona para quien la tenga hasta que expira. Mantén vigencias cortas y no la guardes en logs.
+
+
 * **Bloqueo del acceso público**
-  * Mantén activo **Block all public access**. Un error de CORS se corrige con CORS, nunca abriendo el bucket.
+* Mantén activo **Block all public access**. Un error de CORS se corrige con CORS, nunca abriendo el bucket.
