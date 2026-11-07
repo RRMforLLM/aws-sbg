@@ -108,7 +108,7 @@ La API necesita credenciales para firmar las URLs. Una URL prefirmada solo puede
 | `S3_ACCESS_KEY_ID` | El Access key del paso 2 |
 | `S3_SECRET_ACCESS_KEY` | El Secret access key del paso 2 |
 
-Los nombres empiezan con `S3_` porque Amplify [no permite crear variables con el prefijo `AWS](https://docs.aws.amazon.com/amplify/latest/userguide/environment-variables.html)`.
+Los nombres empiezan con `S3_` porque Amplify [no permite crear variables con el prefijo [AWS](https://docs.aws.amazon.com/amplify/latest/userguide/environment-variables.html).
 
 * Da clic en **Next** y luego en **Save and deploy**.
 * Espera a que la compilación termine. Copia el dominio de tu aplicación, que tiene la forma `https://main.<APP_ID>.amplifyapp.com`.
