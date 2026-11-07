@@ -225,7 +225,7 @@ s3 = boto3.client(
 )
 
 bucket_name = 'sbg-uach-nasa-<equipo>'
-file_key = 'uploads/air.2m.2023.nc'
+file_key = 'uploads/<nombre-en-s3>'
 local_file = 'air.2m.2023.nc'
 
 print("Descargando dataset de 300MB desde S3...")
