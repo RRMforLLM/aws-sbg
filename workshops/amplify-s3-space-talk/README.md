@@ -22,7 +22,7 @@ Después, la misma aplicación consulta esos archivos: la API los lista y genera
 - Repositorio base del laboratorio: [https://github.com/RRMforLLM/nasa-s3-ingest](https://github.com/RRMforLLM/nasa-s3-ingest)
 
 * Un archivo de prueba científico. Descarga con anticipación el dataset NetCDF de temperaturas (aprox. 45 MB) directamente de la NOAA:
-`https://downloads.psl.noaa.gov/Datasets/NARR/Dailies/monolevel/air.2m.2023.nc`
+[https://downloads.psl.noaa.gov/Datasets/NARR/Dailies/monolevel/air.2m.2023.nc](https://downloads.psl.noaa.gov/Datasets/NARR/Dailies/monolevel/air.2m.2023.nc)
 
 ## Prerrequisito adicional
 
