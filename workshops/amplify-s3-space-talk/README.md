@@ -21,10 +21,7 @@ Después, la misma aplicación consulta esos archivos: la API los lista y genera
 - Navegador web moderno. Todo el laboratorio se hace desde la consola: no necesitas AWS CLI ni instalar Node.js.
 - Repositorio base del laboratorio:
 
-```text
 [https://github.com/RRMforLLM/nasa-s3-ingest](https://github.com/RRMforLLM/nasa-s3-ingest)
-
-```
 
 * Un archivo de prueba científico. Descarga con anticipación el dataset NetCDF de temperaturas (aprox. 45 MB) directamente de la NOAA:
 `https://downloads.psl.noaa.gov/Datasets/NARR/Dailies/monolevel/air.2m.2023.nc`
