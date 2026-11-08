@@ -306,7 +306,7 @@ Firmar una URL no contacta a AWS, así que unas credenciales incorrectas no fall
 | `403 SignatureDoesNotMatch` | Secret incorrecto, a menudo con espacios al copiarlo | Corrige `S3_SECRET_ACCESS_KEY` y vuelve a desplegar |
 | `403` con el mensaje `Request has expired` | Pasaron más de 15 minutos desde que se generó la URL | Intenta la subida de nuevo para obtener otra URL |
 | Redirección o error de CORS solo con ciertos valores de región | `S3_REGION` no es la región del bucket | Usa la región exacta del bucket y vuelve a desplegar |
-| La aplicación rechaza un archivo mayor a 5 GB | Es el [máximo de S3 para un solo `PUT](https://docs.aws.amazon.com/AmazonS3/latest/userguide/upload-objects.html)` | Fuera del alcance de este laboratorio: se requiere carga multiparte |
+| La aplicación rechaza un archivo mayor a 5 GB | Es el [máximo de S3 para un solo `PUT`](https://docs.aws.amazon.com/AmazonS3/latest/userguide/upload-objects.html) | Fuera del alcance de este laboratorio: se requiere carga multiparte |
 
 Cada cambio de variables requiere un nuevo despliegue. Un cambio de CORS se aplica sin desplegar, pero recarga la página: el navegador puede conservar la respuesta anterior hasta `MaxAgeSeconds`.
 
